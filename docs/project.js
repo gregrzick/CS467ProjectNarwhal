@@ -1,6 +1,6 @@
 // Reference to the canvas element
 let canvas;
-// Context provides functions used for drawing and 
+// Context provides functions used for drawing and
 // working with Canvas
 let ctx;
 //Stores previously drawn image data to restore after
@@ -27,7 +27,7 @@ class ShapeBoundingBox{
         this.height = height;
     }
 }
- 
+
 // Holds x & y position where clicked
 class MouseDownPos{
     constructor(x,y) {
@@ -35,7 +35,7 @@ class MouseDownPos{
         this.y = y;
     }
 }
- 
+
 // Holds x & y location of the mouse
 class Location{
     constructor(x,y) {
@@ -43,7 +43,7 @@ class Location{
         this.y = y;
     }
 }
- 
+
 // Holds x & y polygon point values
 class PolygonPoint{
     constructor(x,y) {
@@ -51,16 +51,16 @@ class PolygonPoint{
         this.y = y;
     }
 }
-// Stores top left x & y and size of rubber band box 
+// Stores top left x & y and size of rubber band box
 let shapeBoundingBox = new ShapeBoundingBox(0,0,0,0);
 // Holds x & y position where clicked
 let mousedown = new MouseDownPos(0,0);
 // Holds x & y location of the mouse
 let loc = new Location(0,0);
- 
+
 // Call for our function to execute when page is loaded
 document.addEventListener('DOMContentLoaded', setupCanvas);
- 
+
 function setupCanvas(){
     // Get reference to canvas element
     canvas = document.getElementById('my-canvas');
@@ -75,7 +75,9 @@ function setupCanvas(){
     // Execute ReactToMouseUp when the mouse is clicked
     canvas.addEventListener("mouseup", ReactToMouseUp);
 }
+
 function ChangeTool(toolClicked){
+    document.getElementById("pencil").className = "";
     document.getElementById("brush").className = "";
     document.getElementById("line").className = "";
     document.getElementById("eraser").className = "";
