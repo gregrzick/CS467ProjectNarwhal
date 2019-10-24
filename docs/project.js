@@ -1,6 +1,6 @@
 // Reference to the canvas element
 let canvas;
-// Context provides functions used for drawing and 
+// Context provides functions used for drawing and
 // working with Canvas
 let ctx;
 // Stores previously drawn image data to restore after
@@ -23,7 +23,7 @@ let brushXPoints;
 let brushYPoints;
 // Stores whether mouse is down
 let brushDownPos;
- 
+
 // Stores size data used to create rubber band shapes
 // that will redraw as the user moves the mouse
 class ShapeBoundingBox{
@@ -55,16 +55,16 @@ class PolygonPoint{
         this.y = y;
     }
 }
-// Stores top left x & y and size of rubber band box 
+// Stores top left x & y and size of rubber band box
 let shapeBoundingBox = new ShapeBoundingBox(0,0,0,0);
 // Holds x & y position where clicked
 let mousedown = new MouseDownPos(0,0);
 // Holds x & y location of the mouse
 let loc = new Location(0,0);
- 
+
 // Call for our function to execute when page is loaded
 document.addEventListener('DOMContentLoaded', setupCanvas);
- 
+
 function setupCanvas(){
     // Get reference to canvas element
     canvas = document.getElementById('my-canvas');
@@ -101,23 +101,23 @@ function GetMousePosition(x,y){
         y: (y - canvasSizeData.top)  * (canvas.height / canvasSizeData.height)
       };
 }
- 
+
 function SaveCanvasImage(){
     // Save image
     savedImageData = ctx.getImageData(0,0,canvas.width,canvas.height);
 }
- 
+
 function RedrawCanvasImage(){
     // Restore image
     ctx.putImageData(savedImageData,0,0);
 }
- 
+
 function UpdateRubberbandSizeData(loc){
     // Height & width are the difference between were clicked
     // and current mouse position
     shapeBoundingBox.width = Math.abs(loc.x - mousedown.x);
     shapeBoundingBox.height = Math.abs(loc.y - mousedown.y);
- 
+
     // If mouse is below where mouse was clicked originally
     if(loc.x > mousedown.x){
         // Store mousedown because it is farthest left
@@ -128,7 +128,7 @@ function UpdateRubberbandSizeData(loc){
     }
     // If mouse location is below where clicked originally
     if(loc.y > mousedown.y){
- 
+
         // Store mousedown because it is closer to the top
         // of the canvas
         shapeBoundingBox.top = mousedown.y;
@@ -137,7 +137,7 @@ function UpdateRubberbandSizeData(loc){
         shapeBoundingBox.top = loc.y;
     }
 }
- 
+
 // Returns the angle using x and y
 // x = Adjacent Side
 // y = Opposite Side
@@ -158,7 +158,7 @@ function radiansToDegrees(rad){
         return (rad * (180 / Math.PI)).toFixed(2);
     }
 }
- 
+
 // Converts degrees to radians
 function degreesToRadians(degrees){
     return degrees * (Math.PI / 180);
@@ -166,15 +166,15 @@ function degreesToRadians(degrees){
 function getPolygonPoints(){
     // Get angle in radians based on x & y of mouse location
     let angle =  degreesToRadians(getAngleUsingXAndY(loc.x, loc.y));
- 
+
     // X & Y for the X & Y point representing the radius is equal to
     // the X & Y of the bounding rubberband box
     let radiusX = shapeBoundingBox.width;
     let radiusY = shapeBoundingBox.height;
     // Stores all points in the polygon
     let polygonPoints = [];
- 
-    // Each point in the polygon is found by breaking the 
+
+    // Each point in the polygon is found by breaking the
     // parts of the polygon into triangles
     // Then I can use the known angle and adjacent side length
     // to find the X = mouseLoc.x + radiusX * Sin(angle)
@@ -182,15 +182,15 @@ function getPolygonPoints(){
     for(let i = 0; i < polygonSides; i++){
         polygonPoints.push(new PolygonPoint(loc.x + radiusX * Math.sin(angle),
         loc.y - radiusY * Math.cos(angle)));
- 
+
         // 2 * PI equals 360 degrees
-        // Divide 360 into parts based on how many polygon 
-        // sides you want 
+        // Divide 360 into parts based on how many polygon
+        // sides you want
         angle += 2 * Math.PI / polygonSides;
     }
     return polygonPoints;
 }
- 
+
 // Get the polygon points and draw the polygon
 function getPolygon(){
     let polygonPoints = getPolygonPoints();
@@ -201,7 +201,7 @@ function getPolygon(){
     }
     ctx.closePath();
 }
- 
+
 // Called to draw the line
 function drawRubberbandShape(loc){
     ctx.strokeStyle = document.getElementById("myColor").value;
@@ -244,13 +244,13 @@ function drawRubberbandShape(loc){
 }
 
 function UpdateRubberbandOnMove(loc){
-    // Stores changing height, width, x & y position of most 
+    // Stores changing height, width, x & y position of most
     // top left point being either the click or mouse location
     UpdateRubberbandSizeData(loc);
     // Redraw the shape
     drawRubberbandShape(loc);
 }
- 
+
 // Store each point as the mouse moves and whether the mouse
 // button is currently being dragged
 function AddBrushPoint(x, y, mouseDown){
@@ -259,7 +259,7 @@ function AddBrushPoint(x, y, mouseDown){
     // Store true that mouse is down
     brushDownPos.push(mouseDown);
 }
- 
+
 // Cycle through all brush points and connect them with lines
 function DrawBrush(){
     for(let i = 1; i < brushXPoints.length; i++){
@@ -274,16 +274,16 @@ function DrawBrush(){
         ctx.lineTo(brushXPoints[i], brushYPoints[i]);
         ctx.closePath();
         ctx.stroke();
-    }  
-} 
+    }
+}
 function ReactToMouseDown(e){
     brushXPoints = new Array();
     brushYPoints = new Array();
     brushDownPos = new Array()
-    
+
     // Change the mouse pointer to a crosshair
     canvas.style.cursor = "crosshair";
-    // Store location 
+    // Store location
     loc = GetMousePosition(e.clientX, e.clientY);
     // Save the current canvas image
     SaveCanvasImage();
@@ -298,11 +298,11 @@ function ReactToMouseDown(e){
         AddBrushPoint(loc.x, loc.y);
     }
 };
- 
+
 function ReactToMouseMove(e){
     canvas.style.cursor = "crosshair";
     loc = GetMousePosition(e.clientX, e.clientY);
- 
+
     // If using brush tool and dragging store each point
     if((currentTool === 'brush' || currentTool === 'eraser') && dragging && usingBrush){
         // Throw away brush drawings that occur outside of the canvas
@@ -311,7 +311,7 @@ function ReactToMouseMove(e){
         }
         RedrawCanvasImage();
         DrawBrush();
-    } 
+    }
     else {
         if(dragging){
             RedrawCanvasImage();
@@ -332,7 +332,7 @@ function clearCanvas(){
     canvas.width = canvas.width;
     brushXPoints.length = 0;
     brushYPoints.length = 0;
-    brushDownPos.length = 0;  
+    brushDownPos.length = 0;
 }
 //changes and displays line width
 function changeLineWidth(slideAmount) {
@@ -343,4 +343,20 @@ function changeLineWidth(slideAmount) {
 //Changes # of polygon sides
 function changeSides(sideAmount){
     polygonSides=sideAmount;
+}
+
+// Download canvas image as a PNG
+// Can expand later to several buttons to download as different file types
+// Need some function to have user specify a custom filename
+function canvasToPng(){
+  var download = document.getElementById("canvasPNG");
+  //get current canvas
+  var canvas  = document.getElementById("my-canvas");
+  //get actual image data
+  var image   = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+
+  // send image to download through your browser. Default filename is narwhal-image.
+  download.setAttribute("href", image);
+
+  console.log(image);
 }
