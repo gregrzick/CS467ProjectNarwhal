@@ -153,7 +153,7 @@ function storePos(x, y, mouseDown){
     yPositions.push(y);
     downPos.push(mouseDown);
 }
-function RedrawCanvasImage(){
+function redrawCanvas(){
     // Restore image
     ctx.putImageData(savedImage,0,0);
 }
@@ -172,12 +172,12 @@ function mouseMove(e){
         if(loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight){
             storePos(loc.x, loc.y, true);
         }
-        RedrawCanvasImage();
+        redrawCanvas();
         DrawBrush();
     }else{
         ctx.strokeStyle = document.getElementById("myColor").value;
         if(dragging){
-            RedrawCanvasImage();
+            redrawCanvas();
             UpdateRubberbandOnMove(loc);
         }
     }
@@ -302,7 +302,7 @@ function UpdateRubberbandOnMove(loc){
 function mouseUp(e){
     canvas.style.cursor = "default";
     loc = GetMousePosition(e.clientX, e.clientY);
-    RedrawCanvasImage();
+    redrawCanvas();
     UpdateRubberbandOnMove(loc);
     dragging = false;
     drawing = false;
