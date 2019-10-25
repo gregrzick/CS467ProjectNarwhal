@@ -1,28 +1,29 @@
-// Reference to the canvas element
+//Using canvas
 let canvas;
-// Context provides functions used for drawing and
-// working with Canvas
+//Using canvas libs
 let ctx;
-// Stores previously drawn image data to restore after
-// new drawings are added
-let savedImageData;
-// Stores whether I'm currently dragging the mouse
+//Keeps track of current image
+let savedImage;
+//Using brush
 let dragging = false;
-let strokeColor = 'black';
-let fillColor = 'black';
+//Default brush color
+let brushColor = 'black';
+//Default line width
 let line_Width=2;
+//Default polygon shapes
 let polygonSides =3;
-// Tool currently using
+//Current tool. Defaut is brush
 let currentTool = 'brush';
+//Drawing boundries
 let canvasWidth = 800;
 let canvasHeight = 800;
-// Stores whether I'm currently using brush
-let usingBrush = false;
-// Stores line x & ys used to make brush lines
-let brushXPoints;
-let brushYPoints;
-// Stores whether mouse is down
-let brushDownPos;
+//Toggles drawing
+let drawing = false;
+//Brush x and y points into arrays
+let xPositions;
+let yPositions;
+//If the mouse is clicked down
+let downPos;
 
 // Stores size data used to create rubber band shapes
 // that will redraw as the user moves the mouse
@@ -63,53 +64,77 @@ let mousedown = new MouseDownPos(0,0);
 let loc = new Location(0,0);
 
 // Call for our function to execute when page is loaded
-document.addEventListener('DOMContentLoaded', setupCanvas);
+document.addEventListener('DOMContentLoaded', Canvas);
 
-function setupCanvas(){
-    // Get reference to canvas element
+function Canvas(){
     canvas = document.getElementById('my-canvas');
-    // Get methods for manipulating the canvas
     ctx = canvas.getContext('2d');
-    ctx.strokeStyle = strokeColor;
+    ctx.strokeStyle = brushColor;
     ctx.lineWidth = line_Width;
-    // Execute ReactToMouseDown when the mouse is clicked
-    canvas.addEventListener("mousedown", ReactToMouseDown);
-    // Execute ReactToMouseMove when the mouse is clicked
-    canvas.addEventListener("mousemove", ReactToMouseMove);
-    // Execute ReactToMouseUp when the mouse is clicked
-    canvas.addEventListener("mouseup", ReactToMouseUp);
+    //Sets backround to white
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    //Mouse functions
+    canvas.addEventListener("mousedown", mouseDown);
+    canvas.addEventListener("mousemove", mouseMove);
+    canvas.addEventListener("mouseup", mouseUp);
 }
-function ChangeTool(toolClicked){
-    document.getElementById("brush").className = "";
-    document.getElementById("line").className = "";
-    document.getElementById("eraser").className = "";
-    document.getElementById("text").className = "";
-    document.getElementById("rectangle").className = "";
-    document.getElementById("circle").className ="";
-    document.getElementById("ellipse").className ="";
-    document.getElementById("polygon").className ="";
-    // Highlight the last selected tool on toolbar
-    document.getElementById(toolClicked).className = "selected";
-    // Change current tool used for drawing
-    currentTool = toolClicked;
+function ChangeTool(tool){
+    document.getElementById("brush").className="";
+    document.getElementById("line").className="";
+    document.getElementById("eraser").className="";
+    document.getElementById("text").className="";
+    document.getElementById("circle").className="";
+    document.getElementById("polygon").className="";
+    //Highlight current tool
+    document.getElementById(tool).className="selected";
+    //Change current tool
+    currentTool=tool;
+}
+function mouseDown(e){
+    xPositions=new Array();
+    yPositions=new Array();
+    downPos=new Array()
+
+    canvas.style.cursor = "crosshair";
+    loc = GetMousePosition(e.clientX, e.clientY);
+    SaveCanvasImage();
+    //Store start positions
+    mousedown.x=loc.x;
+    mousedown.y=loc.y;
+    // Store that yes the mouse is being held down
+    dragging=true;
+    //Store line points
+    if(currentTool==='brush' || currentTool==='eraser'){
+        drawing = true;
+        storePos(loc.x, loc.y);
+    }
+};
+//Get canvas position
+function GetMousePosition(x,y){
+    let canvasSizeData=canvas.getBoundingClientRect();
+    x=(x-canvasSizeData.left)*(canvas.width/canvasSizeData.width);
+    y=(y-canvasSizeData.top)*(canvas.height/canvasSizeData.height);
+    return {x,y};
+}
+//Store image
+function SaveCanvasImage(){
+    savedImage = ctx.getImageData(0,0,canvas.width,canvas.height);
+}
+//Push array positions
+function storePos(x, y, mouseDown){
+    xPositions.push(x);
+    yPositions.push(y);
+    // Store true that mouse is down
+    downPos.push(mouseDown);
 }
 // Returns mouse x & y position based on canvas position in page
-function GetMousePosition(x,y){
-    // Get canvas size and position in web page
-    let canvasSizeData = canvas.getBoundingClientRect();
-    return { x: (x - canvasSizeData.left) * (canvas.width  / canvasSizeData.width),
-        y: (y - canvasSizeData.top)  * (canvas.height / canvasSizeData.height)
-      };
-}
 
-function SaveCanvasImage(){
-    // Save image
-    savedImageData = ctx.getImageData(0,0,canvas.width,canvas.height);
-}
+
 
 function RedrawCanvasImage(){
     // Restore image
-    ctx.putImageData(savedImageData,0,0);
+    ctx.putImageData(savedImage,0,0);
 }
 
 function UpdateRubberbandSizeData(loc){
@@ -204,14 +229,11 @@ function getPolygon(){
 
 // Called to draw the line
 function drawRubberbandShape(loc){
-    ctx.strokeStyle = document.getElementById("myColor").value;
-    ctx.fillStyle = document.getElementById("myColor").value;
     if(currentTool === "brush"){
         // Create paint brush
         DrawBrush();
     }else if(currentTool === "eraser"){
-        ctx.strokeStyle = 'white';
-        ctx.fillStyle = 'white';
+        //Creat line, but white
         DrawBrush();
     }else if(currentTool === "line"){
         // Draw Line
@@ -219,30 +241,18 @@ function drawRubberbandShape(loc){
         ctx.moveTo(mousedown.x, mousedown.y);
         ctx.lineTo(loc.x, loc.y);
         ctx.stroke();
-    } else if(currentTool === "rectangle"){
-        // Creates rectangles
-        ctx.strokeRect(shapeBoundingBox.left, shapeBoundingBox.top, shapeBoundingBox.width, shapeBoundingBox.height);
     } else if(currentTool === "circle"){
         // Create circles
         let radius = shapeBoundingBox.width;
         ctx.beginPath();
         ctx.arc(mousedown.x, mousedown.y, radius, 0, Math.PI * 2);
         ctx.stroke();
-    } else if(currentTool === "ellipse"){
-        // Create ellipses
-        // ctx.ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
-        let radiusX = shapeBoundingBox.width / 2;
-        let radiusY = shapeBoundingBox.height / 2;
-        ctx.beginPath();
-        ctx.ellipse(mousedown.x, mousedown.y, radiusX, radiusY, Math.PI / 4, 0, Math.PI * 2);
-        ctx.stroke();
-    } else if(currentTool === "polygon"){
+    }  else if(currentTool === "polygon"){
         // Create polygons
         getPolygon();
         ctx.stroke();
     }
 }
-
 function UpdateRubberbandOnMove(loc){
     // Stores changing height, width, x & y position of most
     // top left point being either the click or mouse location
@@ -250,89 +260,69 @@ function UpdateRubberbandOnMove(loc){
     // Redraw the shape
     drawRubberbandShape(loc);
 }
-
 // Store each point as the mouse moves and whether the mouse
 // button is currently being dragged
-function AddBrushPoint(x, y, mouseDown){
-    brushXPoints.push(x);
-    brushYPoints.push(y);
-    // Store true that mouse is down
-    brushDownPos.push(mouseDown);
-}
+
 
 // Cycle through all brush points and connect them with lines
 function DrawBrush(){
-    for(let i = 1; i < brushXPoints.length; i++){
+    for(let i = 1; i < xPositions.length; i++){
         ctx.beginPath();
         // Check if the mouse button was down at this point
         // and if so continue drawing
-        if(brushDownPos[i]){
-            ctx.moveTo(brushXPoints[i-1], brushYPoints[i-1]);
+        if(downPos[i]){
+            ctx.moveTo(xPositions[i-1], yPositions[i-1]);
         } else {
-            ctx.moveTo(brushXPoints[i]-1, brushYPoints[i]);
+            ctx.moveTo(xPositions[i]-1, yPositions[i]);
         }
-        ctx.lineTo(brushXPoints[i], brushYPoints[i]);
+        ctx.lineTo(xPositions[i], yPositions[i]);
         ctx.closePath();
         ctx.stroke();
     }
 }
-function ReactToMouseDown(e){
-    brushXPoints = new Array();
-    brushYPoints = new Array();
-    brushDownPos = new Array()
 
-    // Change the mouse pointer to a crosshair
-    canvas.style.cursor = "crosshair";
-    // Store location
-    loc = GetMousePosition(e.clientX, e.clientY);
-    // Save the current canvas image
-    SaveCanvasImage();
-    // Store mouse position when clicked
-    mousedown.x = loc.x;
-    mousedown.y = loc.y;
-    // Store that yes the mouse is being held down
-    dragging = true;
-    // Brush will store points in an array
-    if(currentTool === 'brush' || currentTool === 'eraser'){
-        usingBrush = true;
-        AddBrushPoint(loc.x, loc.y);
-    }
-};
 
-function ReactToMouseMove(e){
+function mouseMove(e){
     canvas.style.cursor = "crosshair";
     loc = GetMousePosition(e.clientX, e.clientY);
 
     // If using brush tool and dragging store each point
-    if((currentTool === 'brush' || currentTool === 'eraser') && dragging && usingBrush){
+    if((currentTool === 'brush' || currentTool === 'eraser') && dragging && drawing){
         // Throw away brush drawings that occur outside of the canvas
+        if(currentTool==='brush'){
+            ctx.strokeStyle = document.getElementById("myColor").value;
+        }
+        if(currentTool==='eraser'){
+            ctx.strokeStyle = 'white';
+        }
         if(loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight){
-            AddBrushPoint(loc.x, loc.y, true);
+            storePos(loc.x, loc.y, true);
         }
         RedrawCanvasImage();
         DrawBrush();
     }
     else {
+        ctx.strokeStyle = document.getElementById("myColor").value;
         if(dragging){
             RedrawCanvasImage();
             UpdateRubberbandOnMove(loc);
         }
     }
 };
-function ReactToMouseUp(e){
+function mouseUp(e){
     canvas.style.cursor = "default";
     loc = GetMousePosition(e.clientX, e.clientY);
     RedrawCanvasImage();
     UpdateRubberbandOnMove(loc);
     dragging = false;
-    usingBrush = false;
+    drawing = false;
 }
 //Clears page and resets brush points
 function clearCanvas(){
     canvas.width = canvas.width;
-    brushXPoints.length = 0;
-    brushYPoints.length = 0;
-    brushDownPos.length = 0;
+    xPositions.length = 0;
+    yPositions.length = 0;
+    downPos.length = 0;
 }
 //changes and displays line width
 function changeLineWidth(slideAmount) {
@@ -342,6 +332,18 @@ function changeLineWidth(slideAmount) {
 }
 //Changes # of polygon sides
 function changeSides(sideAmount){
+    if(sideAmount==='3'){
+        document.getElementById("currentPolygon").src="icons/triangle-icon.png";
+    }
+    if(sideAmount==='4'){
+        document.getElementById("currentPolygon").src="icons/rectangle-icon.png";
+    }
+    if(sideAmount==='5'){
+        document.getElementById("currentPolygon").src="icons/pentagon-icon.png";
+    }
+    if(sideAmount==='6'){
+        document.getElementById("currentPolygon").src="icons/hexagon-icon.png";
+    }
     polygonSides=sideAmount;
 }
 
