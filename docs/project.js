@@ -1,29 +1,29 @@
 //Using canvas
-let canvas;
+var canvas;
 //Using canvas libs
-let ctx;
+var ctx;
 //Keeps track of current image
-let savedImage;
+var savedImage;
 //Using brush
-let dragging = false;
+var dragging = false;
 //Default brush color
-let brushColor = 'black';
+var brushColor = 'black';
 //Default line width
-let line_Width=2;
+var line_Width=2;
 //Default polygon shapes
-let polygonSides =3;
+var polygonSides =3;
 //Current tool. Defaut is brush
-let currentTool = 'brush';
+var currentTool = 'brush';
 //Drawing boundries
-let canvasWidth = 800;
-let canvasHeight = 800;
+var canvasWidth = 800;
+var canvasHeight = 800;
 //Toggles drawing
-let drawing = false;
+var drawing = false;
 //Brush x and y points into arrays
-let xPositions;
-let yPositions;
+var xPositions;
+var yPositions;
 //If the mouse is clicked down
-let downPos;
+var downPos;
 
 // Stores size data used to create rubber band shapes
 // that will redraw as the user moves the mouse
@@ -57,11 +57,11 @@ class PolygonPoint{
     }
 }
 // Stores top left x & y and size of rubber band box
-let shapeBoundingBox = new ShapeBoundingBox(0,0,0,0);
+var shapeBoundingBox = new ShapeBoundingBox(0,0,0,0);
 // Holds x & y position where clicked
-let mousedown = new MouseDownPos(0,0);
+var mousedown = new MouseDownPos(0,0);
 // Holds x & y location of the mouse
-let loc = new Location(0,0);
+var loc = new Location(0,0);
 
 // Call for our function to execute when page is loaded
 document.addEventListener('DOMContentLoaded', Canvas);
@@ -91,6 +91,32 @@ function ChangeTool(tool){
     //Change current tool
     currentTool=tool;
 }
+//Draw with current tool
+function draw(loc){
+    if(currentTool==="brush"){
+        //Draw line
+        DrawBrush();
+    }else if(currentTool==="eraser"){
+        //Draw line, but white
+        DrawBrush();
+    }else if(currentTool==="line"){
+        //Draw straight Line
+        ctx.beginPath();
+        ctx.moveTo(mousedown.x, mousedown.y);
+        ctx.lineTo(loc.x, loc.y);
+        ctx.stroke();
+    } else if(currentTool==="circle"){
+        //Draw circle
+        var radius=shapeBoundingBox.width;
+        ctx.beginPath();
+        ctx.arc(mousedown.x, mousedown.y, radius, 0, Math.PI * 2);
+        ctx.stroke();
+    }  else if(currentTool==="polygon"){
+        //Draw polygons
+        getPolygon();
+        ctx.stroke();
+    }
+}
 function mouseDown(e){
     xPositions=new Array();
     yPositions=new Array();
@@ -102,7 +128,7 @@ function mouseDown(e){
     //Store start positions
     mousedown.x=loc.x;
     mousedown.y=loc.y;
-    // Store that yes the mouse is being held down
+    //Store that the mouse is being held down
     dragging=true;
     //Store line points
     if(currentTool==='brush' || currentTool==='eraser'){
@@ -112,7 +138,7 @@ function mouseDown(e){
 };
 //Get canvas position
 function GetMousePosition(x,y){
-    let canvasSizeData=canvas.getBoundingClientRect();
+    var canvasSizeData=canvas.getBoundingClientRect();
     x=(x-canvasSizeData.left)*(canvas.width/canvasSizeData.width);
     y=(y-canvasSizeData.top)*(canvas.height/canvasSizeData.height);
     return {x,y};
@@ -125,23 +151,58 @@ function SaveCanvasImage(){
 function storePos(x, y, mouseDown){
     xPositions.push(x);
     yPositions.push(y);
-    // Store true that mouse is down
     downPos.push(mouseDown);
 }
-// Returns mouse x & y position based on canvas position in page
-
-
-
 function RedrawCanvasImage(){
     // Restore image
     ctx.putImageData(savedImage,0,0);
 }
-
+function mouseMove(e){
+    canvas.style.cursor = "crosshair";
+    loc = GetMousePosition(e.clientX, e.clientY);
+    //If using the brush or eraser and holding down the mouse, store points
+    if((currentTool==='brush' || currentTool==='eraser') && drawing && dragging){
+        if(currentTool==='brush'){
+            ctx.strokeStyle = document.getElementById("myColor").value;
+        }
+        if(currentTool==='eraser'){
+            ctx.strokeStyle = 'white';
+        }
+        //Draw only inside canvas
+        if(loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight){
+            storePos(loc.x, loc.y, true);
+        }
+        RedrawCanvasImage();
+        DrawBrush();
+    }else{
+        ctx.strokeStyle = document.getElementById("myColor").value;
+        if(dragging){
+            RedrawCanvasImage();
+            UpdateRubberbandOnMove(loc);
+        }
+    }
+};
+// Cycle through all brush points and connect them with lines
+function DrawBrush(){
+    for(var i=1;i<xPositions.length;i++){
+        ctx.beginPath();
+        // Check if the mouse button was down at this point
+        // and if so continue drawing
+        if(downPos[i]){
+            ctx.moveTo(xPositions[i-1], yPositions[i-1]);
+        }else {
+            ctx.moveTo(xPositions[i]-1, yPositions[i]);
+        }
+        ctx.lineTo(xPositions[i], yPositions[i]);
+        ctx.closePath();
+        ctx.stroke();
+    }
+}
 function UpdateRubberbandSizeData(loc){
     // Height & width are the difference between were clicked
     // and current mouse position
-    shapeBoundingBox.width = Math.abs(loc.x - mousedown.x);
-    shapeBoundingBox.height = Math.abs(loc.y - mousedown.y);
+    shapeBoundingBox.width = Math.abs(loc.x-mousedown.x);
+    shapeBoundingBox.height = Math.abs(loc.y-mousedown.y);
 
     // If mouse is below where mouse was clicked originally
     if(loc.x > mousedown.x){
@@ -169,8 +230,8 @@ function UpdateRubberbandSizeData(loc){
 // Tan(Angle) = Opposite / Adjacent
 // Angle = ArcTan(Opposite / Adjacent)
 function getAngleUsingXAndY(mouselocX, mouselocY){
-    let adjacent = mousedown.x - mouselocX;
-    let opposite = mousedown.y - mouselocY;
+    var adjacent = mousedown.x - mouselocX;
+    var opposite = mousedown.y - mouselocY;
     return radiansToDegrees(Math.atan2(opposite, adjacent));
 }
 function radiansToDegrees(rad){
@@ -190,21 +251,21 @@ function degreesToRadians(degrees){
 }
 function getPolygonPoints(){
     // Get angle in radians based on x & y of mouse location
-    let angle =  degreesToRadians(getAngleUsingXAndY(loc.x, loc.y));
+    var angle =  degreesToRadians(getAngleUsingXAndY(loc.x, loc.y));
 
     // X & Y for the X & Y point representing the radius is equal to
     // the X & Y of the bounding rubberband box
-    let radiusX = shapeBoundingBox.width;
-    let radiusY = shapeBoundingBox.height;
+    var radiusX = shapeBoundingBox.width;
+    var radiusY = shapeBoundingBox.height;
     // Stores all points in the polygon
-    let polygonPoints = [];
+    var polygonPoints = [];
 
     // Each point in the polygon is found by breaking the
     // parts of the polygon into triangles
     // Then I can use the known angle and adjacent side length
     // to find the X = mouseLoc.x + radiusX * Sin(angle)
     // You find the Y = mouseLoc.y + radiusY * Cos(angle)
-    for(let i = 0; i < polygonSides; i++){
+    for(var i = 0; i < polygonSides; i++){
         polygonPoints.push(new PolygonPoint(loc.x + radiusX * Math.sin(angle),
         loc.y - radiusY * Math.cos(angle)));
 
@@ -218,97 +279,26 @@ function getPolygonPoints(){
 
 // Get the polygon points and draw the polygon
 function getPolygon(){
-    let polygonPoints = getPolygonPoints();
+    var polygonPoints = getPolygonPoints();
     ctx.beginPath();
     ctx.moveTo(polygonPoints[0].x, polygonPoints[0].y);
-    for(let i = 1; i < polygonSides; i++){
+    for(var i = 1; i < polygonSides; i++){
         ctx.lineTo(polygonPoints[i].x, polygonPoints[i].y);
     }
     ctx.closePath();
 }
 
-// Called to draw the line
-function drawRubberbandShape(loc){
-    if(currentTool === "brush"){
-        // Create paint brush
-        DrawBrush();
-    }else if(currentTool === "eraser"){
-        //Creat line, but white
-        DrawBrush();
-    }else if(currentTool === "line"){
-        // Draw Line
-        ctx.beginPath();
-        ctx.moveTo(mousedown.x, mousedown.y);
-        ctx.lineTo(loc.x, loc.y);
-        ctx.stroke();
-    } else if(currentTool === "circle"){
-        // Create circles
-        let radius = shapeBoundingBox.width;
-        ctx.beginPath();
-        ctx.arc(mousedown.x, mousedown.y, radius, 0, Math.PI * 2);
-        ctx.stroke();
-    }  else if(currentTool === "polygon"){
-        // Create polygons
-        getPolygon();
-        ctx.stroke();
-    }
-}
+
 function UpdateRubberbandOnMove(loc){
     // Stores changing height, width, x & y position of most
     // top left point being either the click or mouse location
     UpdateRubberbandSizeData(loc);
     // Redraw the shape
-    drawRubberbandShape(loc);
+    draw(loc);
 }
 // Store each point as the mouse moves and whether the mouse
 // button is currently being dragged
 
-
-// Cycle through all brush points and connect them with lines
-function DrawBrush(){
-    for(let i = 1; i < xPositions.length; i++){
-        ctx.beginPath();
-        // Check if the mouse button was down at this point
-        // and if so continue drawing
-        if(downPos[i]){
-            ctx.moveTo(xPositions[i-1], yPositions[i-1]);
-        } else {
-            ctx.moveTo(xPositions[i]-1, yPositions[i]);
-        }
-        ctx.lineTo(xPositions[i], yPositions[i]);
-        ctx.closePath();
-        ctx.stroke();
-    }
-}
-
-
-function mouseMove(e){
-    canvas.style.cursor = "crosshair";
-    loc = GetMousePosition(e.clientX, e.clientY);
-
-    // If using brush tool and dragging store each point
-    if((currentTool === 'brush' || currentTool === 'eraser') && dragging && drawing){
-        // Throw away brush drawings that occur outside of the canvas
-        if(currentTool==='brush'){
-            ctx.strokeStyle = document.getElementById("myColor").value;
-        }
-        if(currentTool==='eraser'){
-            ctx.strokeStyle = 'white';
-        }
-        if(loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight){
-            storePos(loc.x, loc.y, true);
-        }
-        RedrawCanvasImage();
-        DrawBrush();
-    }
-    else {
-        ctx.strokeStyle = document.getElementById("myColor").value;
-        if(dragging){
-            RedrawCanvasImage();
-            UpdateRubberbandOnMove(loc);
-        }
-    }
-};
 function mouseUp(e){
     canvas.style.cursor = "default";
     loc = GetMousePosition(e.clientX, e.clientY);
