@@ -198,6 +198,14 @@ function DrawBrush(){
         ctx.stroke();
     }
 }
+function mouseUp(e){
+    canvas.style.cursor = "default";
+    loc = GetMousePosition(e.clientX, e.clientY);
+    redrawCanvas();
+    UpdateRubberbandOnMove(loc);
+    dragging = false;
+    drawing = false;
+}
 function UpdateRubberbandSizeData(loc){
     // Height & width are the difference between were clicked
     // and current mouse position
@@ -299,14 +307,7 @@ function UpdateRubberbandOnMove(loc){
 // Store each point as the mouse moves and whether the mouse
 // button is currently being dragged
 
-function mouseUp(e){
-    canvas.style.cursor = "default";
-    loc = GetMousePosition(e.clientX, e.clientY);
-    redrawCanvas();
-    UpdateRubberbandOnMove(loc);
-    dragging = false;
-    drawing = false;
-}
+
 //Clears page and resets brush points
 function clearCanvas(){
     canvas.width = canvas.width;
@@ -336,7 +337,6 @@ function changeSides(sideAmount){
     }
     polygonSides=sideAmount;
 }
-
 // Download canvas image as a PNG
 // Can expand later to several buttons to download as different file types
 // Need some function to have user specify a custom filename
