@@ -93,6 +93,7 @@ function ChangeTool(tool){
 }
 //Draw with current tool
 function draw(loc){
+    
     if(currentTool==="brush"){
         //Draw line
         DrawBrush();
@@ -166,7 +167,7 @@ function mouseMove(e){
             ctx.strokeStyle = document.getElementById("myColor").value;
         }
         if(currentTool==='eraser'){
-            ctx.strokeStyle = 'white';
+            ctx.strokeStyle = "white";
         }
         //Draw only inside canvas
         if(loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight){
@@ -182,12 +183,10 @@ function mouseMove(e){
         }
     }
 };
-// Cycle through all brush points and connect them with lines
+//Connect brush points in the array
 function DrawBrush(){
     for(var i=1;i<xPositions.length;i++){
         ctx.beginPath();
-        // Check if the mouse button was down at this point
-        // and if so continue drawing
         if(downPos[i]){
             ctx.moveTo(xPositions[i-1], yPositions[i-1]);
         }else {
@@ -198,6 +197,7 @@ function DrawBrush(){
         ctx.stroke();
     }
 }
+//Reset mouse on mouseup
 function mouseUp(e){
     canvas.style.cursor = "default";
     loc = GetMousePosition(e.clientX, e.clientY);
@@ -237,7 +237,7 @@ function UpdateRubberbandSizeData(loc){
 // y = Opposite Side
 // Tan(Angle) = Opposite / Adjacent
 // Angle = ArcTan(Opposite / Adjacent)
-function getAngleUsingXAndY(mouselocX, mouselocY){
+function getAngle(mouselocX, mouselocY){
     var adjacent = mousedown.x - mouselocX;
     var opposite = mousedown.y - mouselocY;
     return radiansToDegrees(Math.atan2(opposite, adjacent));
@@ -253,13 +253,14 @@ function radiansToDegrees(rad){
     }
 }
 
-// Converts degrees to radians
+//Convert degree to redians
 function degreesToRadians(degrees){
-    return degrees * (Math.PI / 180);
+    degrees=degrees*(Math.PI/180);
+    return degrees;
 }
 function getPolygonPoints(){
     // Get angle in radians based on x & y of mouse location
-    var angle =  degreesToRadians(getAngleUsingXAndY(loc.x, loc.y));
+    var angle =  degreesToRadians(getAngle(loc.x, loc.y));
 
     // X & Y for the X & Y point representing the radius is equal to
     // the X & Y of the bounding rubberband box
@@ -284,8 +285,7 @@ function getPolygonPoints(){
     }
     return polygonPoints;
 }
-
-// Get the polygon points and draw the polygon
+//Draw selected polygon
 function getPolygon(){
     var polygonPoints = getPolygonPoints();
     ctx.beginPath();
@@ -295,8 +295,6 @@ function getPolygon(){
     }
     ctx.closePath();
 }
-
-
 function UpdateRubberbandOnMove(loc){
     // Stores changing height, width, x & y position of most
     // top left point being either the click or mouse location
@@ -304,18 +302,16 @@ function UpdateRubberbandOnMove(loc){
     // Redraw the shape
     draw(loc);
 }
-// Store each point as the mouse moves and whether the mouse
-// button is currently being dragged
-
-
 //Clears page and resets brush points
 function clearCanvas(){
     canvas.width = canvas.width;
     xPositions.length = 0;
     yPositions.length = 0;
     downPos.length = 0;
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
-//changes and displays line width
+//Changes and displays line width
 function changeLineWidth(slideAmount) {
     ctx.lineWidth=slideAmount;
     var sliderDiv = document.getElementById("sliderAmount");

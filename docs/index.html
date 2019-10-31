@@ -42,12 +42,18 @@
                                 <a class="colorBox box7" href="#" id="color7" onclick="ChangeColor()"></a>
                                 <a class="colorBox box8" href="#" id="color8" onclick="ChangeColor()"></a>
                                 <input type="color" id="myColor">
+                                <input type="range" min="0" max="255" value="0" class="colorslider" id="" onchange="changeRGB(this.value)">
+                                <div class="" id=""></div>
+                                <input type="range" min="0" max="255" value="0" class="colorslider" id="" onchange="changeRGB(this.value)">
+                                <div class="" id=""></div>
+                                <input type="range" min="0" max="255" value="0" class="colorslider" id="" onchange="changeRGB(this.value)">
+                                <div class="" id=""></div>
                             </div>
                         </div>
                         <div class="size-dropdown"><img class="icons" src="icons/size-icon.png">
                             <div class="size-dropdown-content">
                                 <input type="range" min="1" max="20" value="2" class="slider" id="myRange" onchange="changeLineWidth(this.value)">
-                                <div id="sliderAmount"></div>
+                                <div class="sliderAmount" id="sliderAmount"></div>
                             </div>
                         </div>
                         <a id="demo"></a>

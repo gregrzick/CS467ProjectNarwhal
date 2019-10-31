@@ -85,10 +85,34 @@
     width: 20px;
     height: 20px;
     margin: 5px;
-    border: 1px solid rgba(0, 0, 0, .2);
+    border: 1px solid black;
 }
 .box1{
-      background-color: blue;
+      background-color: black;
+}
+.box2{
+    background-color: blue;
+}
+.box3{
+    background-color: red;
+}
+.box4{
+    background-color: green;
+}
+.box5{
+    background-color: yellow;
+}
+.box6{
+    background-color: purple;
+}
+.box7{
+    background-color: orange;
+}
+.box8{
+    background-color: lightblue;
+}
+.sliderAmount{
+    padding-left: 40%;
 }
 .size-dropdown-content{
     display:none;
@@ -99,5 +123,6 @@
 .size-dropdown:hover .size-dropdown-content{
     display: inline-block;
 }
+
 
 
