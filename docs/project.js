@@ -156,8 +156,6 @@ function ChangeTool(tool){
 }
 //Draw with current tool
 function draw(loc){
-    //Saves previous state before drawing
-    //saveState(canvas, undoList, false);
     if(currentTool==="brush"){
         //Draw line
         DrawBrush();
