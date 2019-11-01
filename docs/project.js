@@ -81,6 +81,13 @@ function canvas(){
     canvas.addEventListener("mousedown", mouseDown);
     canvas.addEventListener("mousemove", mouseMove);
     canvas.addEventListener("mouseup", mouseUp);
+    //Implementing ctrl+z for undo and ctrl+y for redo
+    document.onkeyup = function(e){
+        if(e.ctrlKey && (e.which==90 || e.which==122))
+            undo();
+        if(e.ctrlKey && (e.which==89 || e.which==121))
+            redo();
+    }
 }
 function changeTool(tool){
     document.getElementById("brush").className="";
@@ -419,7 +426,7 @@ function openImage(){
 }
 //End open file via explorer
 
-//Attempting color change
+//Color change buttons in dropdown
 function changeColor(color){
     brushColor = color;
     ctx.strokeStyle = color;
