@@ -157,7 +157,7 @@ function ChangeTool(tool){
 //Draw with current tool
 function draw(loc){
     //Saves previous state before drawing
-    saveState(canvas, undoList, false);
+    //saveState(canvas, undoList, false);
     if(currentTool==="brush"){
         //Draw line
         DrawBrush();
@@ -183,9 +183,11 @@ function draw(loc){
     }
 }
 function mouseDown(e){
+    //Saves previous state before drawing
+    saveState(canvas, undoList, false);
     xPositions=new Array();
     yPositions=new Array();
-    downPos=new Array()
+    downPos=new Array();
 
     canvas.style.cursor = "crosshair";
     loc = GetMousePosition(e.clientX, e.clientY);
