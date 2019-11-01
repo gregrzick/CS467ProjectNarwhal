@@ -18,14 +18,14 @@
             <div class="b1">
                 <div class ="b1-inner">
                     <nav class="nav flex-column">
-                        <a class="selected" href="#" id="brush" onclick="ChangeTool('brush')"><img class="icons" src="icons/brush-icon.png"></a>
-                        <a href="#" id="eraser" onclick="ChangeTool('eraser')"><img class="icons" src="icons/eraser-icon.png"></a>
-                        <a href="#" id="text" onclick="ChangeTool('text')"><img class="icons" src="icons/text-icon.png"></a>
-                        <a href="#" id="line" onclick="ChangeTool('line')"><img class="icons" src="icons/line-icon.png"></a>
+                        <a class="selected" href="#" id="brush" onclick="changeTool('brush')"><img class="icons" src="icons/brush-icon.png"></a>
+                        <a href="#" id="eraser" onclick="changeTool('eraser')"><img class="icons" src="icons/eraser-icon.png"></a>
+                        <a href="#" id="text" onclick="changeTool('text')"><img class="icons" src="icons/text-icon.png"></a>
+                        <a href="#" id="line" onclick="changeTool('line')"><img class="icons" src="icons/line-icon.png"></a>
                         <div class="shape-dropdown"><img class="icons" src="icons/shapes-icon.png">
                             <div class="shape-dropdown-content">
-                                    <a href="#" id="circle" onclick="ChangeTool('circle')"><img class="icons" src="icons/circle-icon.png"></a>
-                                    <a href="#" class="sides" id="polygon" onclick="ChangeTool('polygon')"><img class="icons" id="currentPolygon" src="icons/triangle-icon.png"></a>
+                                    <a href="#" id="circle" onclick="changeTool('circle')"><img class="icons" src="icons/circle-icon.png"></a>
+                                    <a href="#" class="sides" id="polygon" onclick="changeTool('polygon')"><img class="icons" id="currentPolygon" src="icons/triangle-icon.png"></a>
                                     <div class="polygon-sides">
                                         <input type="number" id="sides" name="sides" min="3" max="6" value="3" onchange="changeSides(this.value)">
                                     </div>
@@ -33,14 +33,14 @@
                         </div>
                         <div class="color-dropdown"><img class="icons" src="icons/pallet-icon.png">
                             <div class="color-dropdown-content">
-                                <a class="colorBox box1" href="#" id="color1" onclick="ChangeColor()"></a>
-                                <a class="colorBox box2" href="#" id="color2" onclick="ChangeColor()"></a>
-                                <a class="colorBox box3" href="#" id="color3" onclick="ChangeColor()"></a>
-                                <a class="colorBox box4" href="#" id="color4" onclick="ChangeColor()"></a>
-                                <a class="colorBox box5" href="#" id="color5" onclick="ChangeColor()"></a>
-                                <a class="colorBox box6" href="#" id="color6" onclick="ChangeColor()"></a>
-                                <a class="colorBox box7" href="#" id="color7" onclick="ChangeColor()"></a>
-                                <a class="colorBox box8" href="#" id="color8" onclick="ChangeColor()"></a>
+                                <a class="color-box box1" href="#" id="color1" onclick="changeColor()"></a>
+                                <a class="color-box box2" href="#" id="color2" onclick="changeColor()"></a>
+                                <a class="color-box box3" href="#" id="color3" onclick="changeColor()"></a>
+                                <a class="color-box box4" href="#" id="color4" onclick="changeColor()"></a>
+                                <a class="color-box box5" href="#" id="color5" onclick="changeColor()"></a>
+                                <a class="color-box box6" href="#" id="color6" onclick="changeColor()"></a>
+                                <a class="color-box box7" href="#" id="color7" onclick="changeColor()"></a>
+                                <a class="color-box box8" href="#" id="color8" onclick="changeColor()"></a>
                                 <input type="color" id="myColor">
                                 <input type="range" min="0" max="255" value="0" class="colorslider" id="" onchange="changeRGB(this.value)">
                                 <div class="" id=""></div>
@@ -53,7 +53,7 @@
                         <div class="size-dropdown"><img class="icons" src="icons/size-icon.png">
                             <div class="size-dropdown-content">
                                 <input type="range" min="1" max="20" value="2" class="slider" id="myRange" onchange="changeLineWidth(this.value)">
-                                <div class="sliderAmount" id="sliderAmount"></div>
+                                <div class="slider-amount" id="slider-amount"></div>
                             </div>
                         </div>
                         <a id="demo"></a>

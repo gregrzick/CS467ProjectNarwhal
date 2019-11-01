@@ -80,7 +80,7 @@
 .color-dropdown:hover .color-dropdown-content{
     display: inline-block;
 }
-.colorBox{
+.color-box{
     float: left;
     width: 20px;
     height: 20px;
@@ -111,7 +111,7 @@
 .box8{
     background-color: lightblue;
 }
-.sliderAmount{
+.slider-amount{
     padding-left: 40%;
 }
 .size-dropdown-content{

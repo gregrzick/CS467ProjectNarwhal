@@ -24,69 +24,9 @@ var xPositions;
 var yPositions;
 //If the mouse is clicked down
 var downPos;
-
-//Attemping undo/redo functionality, buggy with shapes and lines
-
+//Storing image states for undo/redo
 var redoList = [];
 var undoList = [];
-
-function saveState(canvas, list, keepRedo){
-    keepRedo = keepRedo || false;
-    if(!keepRedo){
-        redoList = [];
-    }
-    (list || undoList).push(canvas.toDataURL());
-}
-
-function undo(){
-    restoreState(canvas, ctx, undoList);
-}
-
-function redo(){
-    restoreState(canvas, ctx, redoList);
-}
-function restoreState(canvas, ctx, list){
-    if(list.length){
-        if(list===undoList){
-            saveState(canvas, redoList, true);
-        }else{
-            saveState(canvas, undoList, true);
-        }
-        var stateToRestore = list.pop();
-        var img = document.createElement('img');
-        img.setAttribute('src',stateToRestore);
-        img.onload = function(){
-            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-            ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-        }
-    }
-}
-
-//End undo/redo functionality
-
-//Attempting open file via explorer
-function openImage(){
-    var input = document.createElement('input');
-    input.type = 'file';
-    input.onchange = e =>{
-        var file = e.target.files[0];
-        var reader = new FileReader();
-        reader.onload = function(e){
-            var img = document.createElement('img');
-            img.src = e.target.result;
-            img.onload = function(){
-                ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-                ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-            }
-        }
-        reader.readAsDataURL(file);
-    }
-    input.click();
-    //Reset undo/redo lists (technically unnecessary)
-    redoList = [];
-    undoList = [];
-}
-//End open file via explorer
 
 // Stores size data used to create rubber band shapes
 // that will redraw as the user moves the mouse
@@ -127,9 +67,9 @@ var mousedown = new MouseDownPos(0,0);
 var loc = new Location(0,0);
 
 // Call for our function to execute when page is loaded
-document.addEventListener('DOMContentLoaded', Canvas);
+document.addEventListener('DOMContentLoaded', canvas);
 
-function Canvas(){
+function canvas(){
     canvas = document.getElementById('my-canvas');
     ctx = canvas.getContext('2d');
     ctx.strokeStyle = brushColor;
@@ -142,7 +82,7 @@ function Canvas(){
     canvas.addEventListener("mousemove", mouseMove);
     canvas.addEventListener("mouseup", mouseUp);
 }
-function ChangeTool(tool){
+function changeTool(tool){
     document.getElementById("brush").className="";
     document.getElementById("line").className="";
     document.getElementById("eraser").className="";
@@ -156,40 +96,48 @@ function ChangeTool(tool){
 }
 //Draw with current tool
 function draw(loc){
-    if(currentTool==="brush"){
-        //Draw line
-        DrawBrush();
-    }else if(currentTool==="eraser"){
-        //Draw line, but white
-        DrawBrush();
-    }else if(currentTool==="line"){
-        //Draw straight Line
-        ctx.beginPath();
-        ctx.moveTo(mousedown.x, mousedown.y);
-        ctx.lineTo(loc.x, loc.y);
-        ctx.stroke();
-    } else if(currentTool==="circle"){
-        //Draw circle
-        var radius=shapeBoundingBox.width;
-        ctx.beginPath();
-        ctx.arc(mousedown.x, mousedown.y, radius, 0, Math.PI * 2);
-        ctx.stroke();
-    }  else if(currentTool==="polygon"){
-        //Draw polygons
-        getPolygon();
-        ctx.stroke();
+    switch(currentTool){
+        case "brush":
+            //Draw line
+            drawBrush();
+            break;
+        case "eraser":
+            //Draw line, but white
+            drawBrush();
+            break;
+        case "line":
+            //Draw straight Line
+            ctx.beginPath();
+            ctx.moveTo(mousedown.x, mousedown.y);
+            ctx.lineTo(loc.x, loc.y);
+            ctx.stroke();
+            break;
+        case "circle":
+            //Draw circle
+            var radius=shapeBoundingBox.width;
+            ctx.beginPath();
+            ctx.arc(mousedown.x, mousedown.y, radius, 0, Math.PI * 2);
+            ctx.stroke();
+            break;
+        case "polygon":
+            //Draw polygons
+            getPolygon();
+            ctx.stroke();
+            break;
+        default:
+            break;
     }
 }
 function mouseDown(e){
-    //Saves previous state before drawing
-    saveState(canvas, undoList, false);
     xPositions=new Array();
     yPositions=new Array();
     downPos=new Array();
 
+    //Saves previous state before drawing
+    saveState(canvas, undoList, false);
     canvas.style.cursor = "crosshair";
-    loc = GetMousePosition(e.clientX, e.clientY);
-    SaveCanvasImage();
+    loc = getMousePosition(e.clientX, e.clientY);
+    saveCanvasImage();
     //Store start positions
     mousedown.x=loc.x;
     mousedown.y=loc.y;
@@ -202,14 +150,14 @@ function mouseDown(e){
     }
 };
 //Get canvas position
-function GetMousePosition(x,y){
+function getMousePosition(x,y){
     var canvasSizeData=canvas.getBoundingClientRect();
     x=(x-canvasSizeData.left)*(canvas.width/canvasSizeData.width);
     y=(y-canvasSizeData.top)*(canvas.height/canvasSizeData.height);
     return {x,y};
 }
 //Store image
-function SaveCanvasImage(){
+function saveCanvasImage(){
     savedImage = ctx.getImageData(0,0,canvas.width,canvas.height);
 }
 //Push array positions
@@ -224,7 +172,7 @@ function redrawCanvas(){
 }
 function mouseMove(e){
     canvas.style.cursor = "crosshair";
-    loc = GetMousePosition(e.clientX, e.clientY);
+    loc = getMousePosition(e.clientX, e.clientY);
     //If using the brush or eraser and holding down the mouse, store points
     if((currentTool==='brush' || currentTool==='eraser') && drawing && dragging){
         if(currentTool==='brush'){
@@ -238,17 +186,17 @@ function mouseMove(e){
             storePos(loc.x, loc.y, true);
         }
         redrawCanvas();
-        DrawBrush();
+        drawBrush();
     }else{
         ctx.strokeStyle = document.getElementById("myColor").value;
         if(dragging){
             redrawCanvas();
-            UpdateRubberbandOnMove(loc);
+            updateRubberbandOnMove(loc);
         }
     }
 };
 //Connect brush points in the array
-function DrawBrush(){
+function drawBrush(){
     for(var i=1;i<xPositions.length;i++){
         ctx.beginPath();
         if(downPos[i]){
@@ -264,13 +212,13 @@ function DrawBrush(){
 //Reset mouse on mouseup
 function mouseUp(e){
     canvas.style.cursor = "default";
-    loc = GetMousePosition(e.clientX, e.clientY);
+    loc = getMousePosition(e.clientX, e.clientY);
     redrawCanvas();
-    UpdateRubberbandOnMove(loc);
+    updateRubberbandOnMove(loc);
     dragging = false;
     drawing = false;
 }
-function UpdateRubberbandSizeData(loc){
+function updateRubberbandSizeData(loc){
     // Height & width are the difference between were clicked
     // and current mouse position
     shapeBoundingBox.width = Math.abs(loc.x-mousedown.x);
@@ -359,10 +307,10 @@ function getPolygon(){
     }
     ctx.closePath();
 }
-function UpdateRubberbandOnMove(loc){
+function updateRubberbandOnMove(loc){
     // Stores changing height, width, x & y position of most
     // top left point being either the click or mouse location
-    UpdateRubberbandSizeData(loc);
+    updateRubberbandSizeData(loc);
     // Redraw the shape
     draw(loc);
 }
@@ -378,7 +326,7 @@ function clearCanvas(){
 //Changes and displays line width
 function changeLineWidth(slideAmount) {
     ctx.lineWidth=slideAmount;
-    var sliderDiv = document.getElementById("sliderAmount");
+    var sliderDiv = document.getElementById("slider-amount");
     sliderDiv.innerHTML = slideAmount;
 }
 //Changes # of polygon sides
@@ -412,3 +360,62 @@ function canvasToPng(){
 
   console.log(image);
 }
+
+//Undo/redo functionality
+function saveState(canvas, list, keepRedo){
+    if(!keepRedo){
+        redoList = [];
+    }
+    list.push(canvas.toDataURL());
+}
+function undo(){
+    restoreState(canvas, ctx, undoList);
+}
+function redo(){
+    restoreState(canvas, ctx, redoList);
+}
+function restoreState(canvas, ctx, list){
+    if(list.length){
+        if(list===undoList){
+            saveState(canvas, redoList, true);
+        }else{
+            saveState(canvas, undoList, true);
+        }
+        var stateToRestore = list.pop();
+        var img = document.createElement('img');
+        img.setAttribute('src',stateToRestore);
+        img.onload = function(){
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+        }
+    }
+}
+//End undo/redo functionality
+
+//Open file via explorer
+function openImage(){
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = e =>{
+        var file = e.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function(e){
+            var img = document.createElement('img');
+            img.src = e.target.result;
+            img.onload = function(){
+                ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+                ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+            }
+        }
+        reader.readAsDataURL(file);
+    }
+    input.click();
+    //Reset undo/redo lists (technically unnecessary)
+    redoList = [];
+    undoList = [];
+}
+//End open file via explorer
+
+//Attempting basic selection tool
+
+//End basic selection tool
