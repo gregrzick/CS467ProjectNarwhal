@@ -6,8 +6,8 @@ var ctx;
 var savedImage;
 //Using brush
 var dragging = false;
-//Default brush color
-var brushColor = 'black';
+//Default brush color (#000000 = black)
+var brushColor = '#000000';
 //Default line width
 var line_Width=2;
 //Default polygon shapes
@@ -87,10 +87,13 @@ function changeTool(tool){
     document.getElementById("line").className="";
     document.getElementById("eraser").className="";
     document.getElementById("text").className="";
+    document.getElementById("shape-dropdown").className="";
     document.getElementById("circle").className="";
     document.getElementById("polygon").className="";
     //Highlight current tool
     document.getElementById(tool).className="selected";
+    if(tool==="circle" || tool==="polygon")
+        document.getElementById("shape-dropdown").className="selected";
     //Change current tool
     currentTool=tool;
 }
@@ -176,7 +179,7 @@ function mouseMove(e){
     //If using the brush or eraser and holding down the mouse, store points
     if((currentTool==='brush' || currentTool==='eraser') && drawing && dragging){
         if(currentTool==='brush'){
-            ctx.strokeStyle = document.getElementById("myColor").value;
+            ctx.strokeStyle = document.getElementById("my-color").value;
         }
         if(currentTool==='eraser'){
             ctx.strokeStyle = "white";
@@ -188,7 +191,7 @@ function mouseMove(e){
         redrawCanvas();
         drawBrush();
     }else{
-        ctx.strokeStyle = document.getElementById("myColor").value;
+        ctx.strokeStyle = document.getElementById("my-color").value;
         if(dragging){
             redrawCanvas();
             updateRubberbandOnMove(loc);
@@ -349,7 +352,7 @@ function changeSides(sideAmount){
 // Can expand later to several buttons to download as different file types
 // Need some function to have user specify a custom filename
 function canvasToPng(){
-  var download = document.getElementById("canvasPNG");
+  var download = document.getElementById("canvas-PNG");
   //get current canvas
   var canvas  = document.getElementById("my-canvas");
   //get actual image data
@@ -415,6 +418,15 @@ function openImage(){
     undoList = [];
 }
 //End open file via explorer
+
+//Attempting color change
+function changeColor(color){
+    brushColor = color;
+    ctx.strokeStyle = color;
+    document.getElementById("my-color").value = color;
+    
+}
+//End color change
 
 //Attempting basic selection tool
 
