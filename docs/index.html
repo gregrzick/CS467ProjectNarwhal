@@ -75,7 +75,10 @@
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" id="new" onclick="clearCanvas()" href="#"><img class="nav-icons" src="icons/new-icon.png">New</a>
                                 <a class="dropdown-item" id="open" onclick="openImage()" href="#"><img class="nav-icons" src="icons/open-icon.png">Open</a>
+                                <a class="dropdown-item" id="canvasPNG" download="narwhal-image.png" onclick="canvasToPng()" href="#"><img class="nav-icons" src="icons/save-icon.png">Save</a>
+                                <!--Temporarily removed to use working save functionality
                                 <a class="dropdown-item" id="save" onclick="saveImage()" href="#"><img class="nav-icons" src="icons/save-icon.png">Save</a>
+                                -->
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
@@ -92,8 +95,14 @@
                 <canvas id="my-canvas" width="800" height="800"></canvas>
             </div>
 
+            <!--
             <div id="img-data-div">
                 <a id="canvasPNG" download="narwhal-image.png"><button type="button" onClick="canvasToPng()">Download as PNG</button></a>
+            </div>
+            -->
+            <div id="undo-redo-btns">
+                <button id="undo-btn" type="button" onClick="undo()">Undo</button>
+                <button id="redo-btn" type="button" onClick="redo()">Redo</button>
             </div>
 
         </div>

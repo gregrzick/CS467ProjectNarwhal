@@ -25,6 +25,46 @@ var yPositions;
 //If the mouse is clicked down
 var downPos;
 
+//Attemping undo/redo functionality, buggy with shape tool
+
+var redoList = [];
+var undoList = [];
+
+function saveState(canvas, list, keepRedo){
+    keepRedo = keepRedo || false;
+    if(!keepRedo){
+        redoList = [];
+    }
+    (list || undoList).push(canvas.toDataURL());
+}
+
+function undo(){
+    restoreState(canvas, ctx, undoList);
+}
+
+function redo(){
+    restoreState(canvas, ctx, redoList);
+}
+function restoreState(canvas, ctx, list){
+    if(list.length){
+        if(list===undoList){
+            saveState(canvas, redoList, true);
+        }else{
+            saveState(canvas, undoList, true);
+        }
+        var stateToRestore = list.pop();
+        var img = document.createElement('img');
+        img.setAttribute('src',stateToRestore);
+        img.onload = function(){
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+        }
+    }
+}
+
+//End undo/redo functionality
+
+
 // Stores size data used to create rubber band shapes
 // that will redraw as the user moves the mouse
 class ShapeBoundingBox{
@@ -93,7 +133,8 @@ function ChangeTool(tool){
 }
 //Draw with current tool
 function draw(loc){
-    
+    //Saves previous state before drawing
+    saveState(canvas, undoList, false);
     if(currentTool==="brush"){
         //Draw line
         DrawBrush();
@@ -273,7 +314,7 @@ function getPolygonPoints(){
     // parts of the polygon into triangles
     // Then I can use the known angle and adjacent side length
     // to find the X = mouseLoc.x + radiusX * Sin(angle)
-    // You find the Y = mouseLoc.y + radiusY * Cos(angle)
+    // You find the Y = mouseLoc.y - radiusY * Cos(angle)
     for(var i = 0; i < polygonSides; i++){
         polygonPoints.push(new PolygonPoint(loc.x + radiusX * Math.sin(angle),
         loc.y - radiusY * Math.cos(angle)));
