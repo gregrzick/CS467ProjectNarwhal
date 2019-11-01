@@ -25,7 +25,7 @@ var yPositions;
 //If the mouse is clicked down
 var downPos;
 
-//Attemping undo/redo functionality, buggy with shape tool
+//Attemping undo/redo functionality, buggy with shapes and lines
 
 var redoList = [];
 var undoList = [];
@@ -64,6 +64,29 @@ function restoreState(canvas, ctx, list){
 
 //End undo/redo functionality
 
+//Attempting open file via explorer
+function openImage(){
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = e =>{
+        var file = e.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function(e){
+            var img = document.createElement('img');
+            img.src = e.target.result;
+            img.onload = function(){
+                ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+                ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+            }
+        }
+        reader.readAsDataURL(file);
+    }
+    input.click();
+    //Reset undo/redo lists (technically unnecessary)
+    redoList = [];
+    undoList = [];
+}
+//End open file via explorer
 
 // Stores size data used to create rubber band shapes
 // that will redraw as the user moves the mouse
