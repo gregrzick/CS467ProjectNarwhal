@@ -22,7 +22,7 @@
                         <a href="#" id="eraser" onclick="changeTool('eraser')"><img class="icons" src="icons/eraser-icon.png"></a>
                         <a href="#" id="text" onclick="changeTool('text')"><img class="icons" src="icons/text-icon.png"></a>
                         <a href="#" id="line" onclick="changeTool('line')"><img class="icons" src="icons/line-icon.png"></a>
-                        <div class="shape-dropdown"><img class="icons" src="icons/shapes-icon.png">
+                        <div id="shape-dropdown"><img class="icons" src="icons/shapes-icon.png">
                             <div class="shape-dropdown-content">
                                     <a href="#" id="circle" onclick="changeTool('circle')"><img class="icons" src="icons/circle-icon.png"></a>
                                     <a href="#" class="sides" id="polygon" onclick="changeTool('polygon')"><img class="icons" id="currentPolygon" src="icons/triangle-icon.png"></a>
@@ -33,26 +33,26 @@
                         </div>
                         <div class="color-dropdown"><img class="icons" src="icons/pallet-icon.png">
                             <div class="color-dropdown-content">
-                                <a class="color-box box1" href="#" id="color1" onclick="changeColor()"></a>
-                                <a class="color-box box2" href="#" id="color2" onclick="changeColor()"></a>
-                                <a class="color-box box3" href="#" id="color3" onclick="changeColor()"></a>
-                                <a class="color-box box4" href="#" id="color4" onclick="changeColor()"></a>
-                                <a class="color-box box5" href="#" id="color5" onclick="changeColor()"></a>
-                                <a class="color-box box6" href="#" id="color6" onclick="changeColor()"></a>
-                                <a class="color-box box7" href="#" id="color7" onclick="changeColor()"></a>
-                                <a class="color-box box8" href="#" id="color8" onclick="changeColor()"></a>
-                                <input type="color" id="myColor">
-                                <input type="range" min="0" max="255" value="0" class="colorslider" id="" onchange="changeRGB(this.value)">
+                                <a class="color-box box1" href="#" id="color1" onclick="changeColor('#000000')"></a>
+                                <a class="color-box box2" href="#" id="color2" onclick="changeColor('#0000FF')"></a>
+                                <a class="color-box box3" href="#" id="color3" onclick="changeColor('#FF0000')"></a>
+                                <a class="color-box box4" href="#" id="color4" onclick="changeColor('#008000')"></a>
+                                <a class="color-box box5" href="#" id="color5" onclick="changeColor('#FFFF00')"></a>
+                                <a class="color-box box6" href="#" id="color6" onclick="changeColor('#800080')"></a>
+                                <a class="color-box box7" href="#" id="color7" onclick="changeColor('#FFA500')"></a>
+                                <a class="color-box box8" href="#" id="color8" onclick="changeColor('#ADD8E6')"></a>
+                                <input type="color" id="my-color">
+                                <input type="range" min="0" max="255" value="0" class="color-slider" id="" onchange="changeRGB(this.value)">
                                 <div class="" id=""></div>
-                                <input type="range" min="0" max="255" value="0" class="colorslider" id="" onchange="changeRGB(this.value)">
+                                <input type="range" min="0" max="255" value="0" class="color-slider" id="" onchange="changeRGB(this.value)">
                                 <div class="" id=""></div>
-                                <input type="range" min="0" max="255" value="0" class="colorslider" id="" onchange="changeRGB(this.value)">
+                                <input type="range" min="0" max="255" value="0" class="color-slider" id="" onchange="changeRGB(this.value)">
                                 <div class="" id=""></div>
                             </div>
                         </div>
                         <div class="size-dropdown"><img class="icons" src="icons/size-icon.png">
                             <div class="size-dropdown-content">
-                                <input type="range" min="1" max="20" value="2" class="slider" id="myRange" onchange="changeLineWidth(this.value)">
+                                <input type="range" min="1" max="20" value="2" class="slider" id="my-range" onchange="changeLineWidth(this.value)">
                                 <div class="slider-amount" id="slider-amount"></div>
                             </div>
                         </div>
@@ -63,42 +63,36 @@
             <div class="b2">
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <a class="navbar-brand" href="#"><img class="logo" src="icons/narwhal-icon.png">JS Paint Project<img class="logo" src="icons/narwhal-icon.png"></a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-supported-content" aria-controls="navbar-supported-content" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <div class="collapse navbar-collapse" id="navbar-supported-content">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">File</a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                  <a class="dropdown-item" id="new" onclick="clearCanvas()" href="#"><img class="nav-icons" src="icons/new-icon.png">New</a>
-                                  <a class="dropdown-item" id="open" onclick="openImage()" href="#"><img class="nav-icons" src="icons/open-icon.png">Open</a>
-                                <!--Temporarily removed to use working save functionality
-                                <a class="dropdown-item" id="save" onclick="saveImage()" href="#"><img class="nav-icons" src="icons/save-icon.png">Save</a>
-                                -->
+                                <a class="nav-link dropdown-toggle" href="#" id="navbar-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                File
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbar-dropdown">
+                                <a class="dropdown-item" id="new" onclick="clearCanvas()" href="#"><img class="nav-icons" src="icons/new-icon.png">New</a>
+                                <a class="dropdown-item" id="open" onclick="openImage()" href="#"><img class="nav-icons" src="icons/open-icon.png">Open</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Save As...</a>
-
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-
                                   <a class="dropdown-item" id="canvasPNG" download="narwhal-image.png" onclick="saveImage(1)" href="#"><img class="nav-icons" src="icons/save-icon.png">PNG</a>
-
                                   <a class="dropdown-item" id="canvasJPG" download="narwhal-image.jpg" onclick="saveImage(2)" href="#"><img class="nav-icons" src="icons/save-icon.png">JPG</a>
-
                                   <a class="dropdown-item" id="canvasBMP" download="narwhal-image.bmp" onclick="saveImage(3)" href="#"><img class="nav-icons" src="icons/save-icon.png">BMP</a>
-
                                 <!--Temporarily removed to use working save functionality
                                 <a class="dropdown-item" id="save" onclick="saveImage()" href="#"><img class="nav-icons" src="icons/save-icon.png">Save</a>
                                 -->
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbar-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Help
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-menu" aria-labelledby="navbar-dropdown">
                                     <a class="dropdown-item" href="#">About</a>
                                 </div>
                             </li>
@@ -110,7 +104,7 @@
 
             <!--
             <div id="img-data-div">
-                <a id="canvasPNG" download="narwhal-image.png"><button type="button" onClick="canvasToPng()">Download as PNG</button></a>
+                <a id="canvas-PNG" download="narwhal-image.png"><button type="button" onClick="canvasToPng()">Download as PNG</button></a>
             </div>
             -->
             <div id="undo-redo-btns">
