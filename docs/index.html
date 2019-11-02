@@ -25,7 +25,7 @@
                         <div id="shape-dropdown"><img class="icons" src="icons/shapes-icon.png">
                             <div class="shape-dropdown-content">
                                     <a href="#" id="circle" onclick="changeTool('circle')"><img class="icons" src="icons/circle-icon.png"></a>
-                                    <a href="#" class="sides" id="polygon" onclick="changeTool('polygon')"><img class="icons" id="currentPolygon" src="icons/triangle-icon.png"></a>
+                                    <a href="#" class="sides" id="polygon" onclick="changeTool('polygon')"><img class="icons" id="current-polygon" src="icons/triangle-icon.png"></a>
                                     <div class="polygon-sides">
                                         <input type="number" id="sides" name="sides" min="3" max="6" value="3" onchange="changeSides(this.value)">
                                     </div>
@@ -83,6 +83,7 @@
                                   <a class="dropdown-item" id="canvasPNG" download="narwhal-image.png" onclick="saveImage(1)" href="#"><img class="nav-icons" src="icons/save-icon.png">PNG</a>
                                   <a class="dropdown-item" id="canvasJPG" download="narwhal-image.jpg" onclick="saveImage(2)" href="#"><img class="nav-icons" src="icons/save-icon.png">JPG</a>
                                   <a class="dropdown-item" id="canvasBMP" download="narwhal-image.bmp" onclick="saveImage(3)" href="#"><img class="nav-icons" src="icons/save-icon.png">BMP</a>
+                                <a class="dropdown-item" id="canvas-PNG" download="narwhal-image.png" onclick="canvasToPng()" href="#"><img class="nav-icons" src="icons/save-icon.png">Save</a>
                                 <!--Temporarily removed to use working save functionality
                                 <a class="dropdown-item" id="save" onclick="saveImage()" href="#"><img class="nav-icons" src="icons/save-icon.png">Save</a>
                                 -->

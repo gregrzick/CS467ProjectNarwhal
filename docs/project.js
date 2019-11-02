@@ -101,6 +101,23 @@ function changeTool(tool){
     document.getElementById(tool).className="selected";
     if(tool==="circle" || tool==="polygon")
         document.getElementById("shape-dropdown").className="selected";
+        if(e.ctrlKey && (e.which==90 || e.which==122)){
+            undo();
+        } else if(e.ctrlKey && (e.which==89 || e.which==121)){
+            redo();
+        }
+    }
+}
+function changeTool(tool){
+    //Removes highlight on current tool and shape dropdown icon
+    document.getElementById(currentTool).className="";
+    document.getElementById("shape-dropdown").className="";
+    //Highlight current tool
+    document.getElementById(tool).className="selected";
+    //Highlight shape dropdown icon when circle or polygon is selected
+    if(tool==="circle" || tool==="polygon"){
+        document.getElementById("shape-dropdown").className="selected";
+    }
     //Change current tool
     currentTool=tool;
 }
@@ -341,22 +358,32 @@ function changeLineWidth(slideAmount) {
 }
 //Changes # of polygon sides
 function changeSides(sideAmount){
-    if(sideAmount==='3'){
-        document.getElementById("currentPolygon").src="icons/triangle-icon.png";
-    }
-    if(sideAmount==='4'){
-        document.getElementById("currentPolygon").src="icons/rectangle-icon.png";
-    }
-    if(sideAmount==='5'){
-        document.getElementById("currentPolygon").src="icons/pentagon-icon.png";
-    }
-    if(sideAmount==='6'){
-        document.getElementById("currentPolygon").src="icons/hexagon-icon.png";
+    switch(sideAmount){
+        case '3':
+            document.getElementById("current-polygon").src="icons/triangle-icon.png";
+            break;
+        case '4':
+            document.getElementById("current-polygon").src="icons/rectangle-icon.png";
+            break;
+        case '5':
+            document.getElementById("current-polygon").src="icons/pentagon-icon.png";
+            break;
+        case '6':
+            document.getElementById("current-polygon").src="icons/hexagon-icon.png";
+            break;
+        default:
+            break;
     }
     polygonSides=sideAmount;
 }
 // save the canvas as an image file type
 function saveImage(format){
+// Download canvas image as a PNG
+// Can expand later to several buttons to download as different file types
+// Need some function to have user specify a custom filename
+function canvasToPng(){
+  var download = document.getElementById("canvas-PNG");
+  //get current canvas
   var canvas  = document.getElementById("my-canvas");
   switch(format){
     case 1:
@@ -434,7 +461,6 @@ function changeColor(color){
     brushColor = color;
     ctx.strokeStyle = color;
     document.getElementById("my-color").value = color;
-
 }
 //End color change
 
