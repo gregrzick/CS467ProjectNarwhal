@@ -373,19 +373,21 @@ function changeSides(sideAmount){
 }
 // save the canvas as an image file type
 function saveImage(format){
-  switch(format){
-    case 1:
-      var download = document.getElementById("canvas-PNG");
-      var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-      break;
-    case 2:
-      var download = document.getElementById("canvas-JPG");
-      var image = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
-      break;
-    case 3:
-      var download = document.getElementById("canvas-BMP");
-      var image = canvas.toDataURL("image/bmp").replace("image/bmp", "image/octet-stream");
-      break;
+    switch(format){
+        case 1:
+            var download = document.getElementById("canvas-PNG");
+            var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+            break;
+        case 2:
+            var download = document.getElementById("canvas-JPG");
+            var image = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
+            break;
+        case 3:
+            var download = document.getElementById("canvas-BMP");
+            var image = canvas.toDataURL("image/bmp").replace("image/bmp", "image/octet-stream");
+            break;
+        default:
+            break;
   }
   download.setAttribute("href", image);
 }
