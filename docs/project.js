@@ -453,10 +453,10 @@ function changeColor(color){
     document.getElementById("my-color").value = color;
     //Set custom color and sliders to correct positions for preset colors  #000000
     document.getElementById("custom-color").value = color;
+    document.getElementById("custom-color").style.background = color;
     document.getElementById("color-slider-r").value = hexToDecimal(color.substr(1,2));
     document.getElementById("color-slider-g").value = hexToDecimal(color.substr(3,2));
     document.getElementById("color-slider-b").value = hexToDecimal(color.substr(5,2));
-
 }
 //End color change
 //RGB color
