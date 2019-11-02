@@ -69,13 +69,26 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                File
-                                </a>
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">File</a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" id="new" onclick="clearCanvas()" href="#"><img class="nav-icons" src="icons/new-icon.png">New</a>
-                                <a class="dropdown-item" id="open" onclick="openImage()" href="#"><img class="nav-icons" src="icons/open-icon.png">Open</a>
-                                <a class="dropdown-item" id="canvasPNG" download="narwhal-image.png" onclick="canvasToPng()" href="#"><img class="nav-icons" src="icons/save-icon.png">Save</a>
+                                  <a class="dropdown-item" id="new" onclick="clearCanvas()" href="#"><img class="nav-icons" src="icons/new-icon.png">New</a>
+                                  <a class="dropdown-item" id="open" onclick="openImage()" href="#"><img class="nav-icons" src="icons/open-icon.png">Open</a>
+                                <!--Temporarily removed to use working save functionality
+                                <a class="dropdown-item" id="save" onclick="saveImage()" href="#"><img class="nav-icons" src="icons/save-icon.png">Save</a>
+                                -->
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Save As...</a>
+
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                                  <a class="dropdown-item" id="canvasPNG" download="narwhal-image.png" onclick="saveImage(1)" href="#"><img class="nav-icons" src="icons/save-icon.png">PNG</a>
+
+                                  <a class="dropdown-item" id="canvasJPG" download="narwhal-image.jpg" onclick="saveImage(2)" href="#"><img class="nav-icons" src="icons/save-icon.png">JPG</a>
+
+                                  <a class="dropdown-item" id="canvasBMP" download="narwhal-image.bmp" onclick="saveImage(3)" href="#"><img class="nav-icons" src="icons/save-icon.png">BMP</a>
+
                                 <!--Temporarily removed to use working save functionality
                                 <a class="dropdown-item" id="save" onclick="saveImage()" href="#"><img class="nav-icons" src="icons/save-icon.png">Save</a>
                                 -->

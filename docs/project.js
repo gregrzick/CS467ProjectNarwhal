@@ -345,22 +345,25 @@ function changeSides(sideAmount){
     }
     polygonSides=sideAmount;
 }
-// Download canvas image as a PNG
-// Can expand later to several buttons to download as different file types
-// Need some function to have user specify a custom filename
-function canvasToPng(){
-  var download = document.getElementById("canvasPNG");
-  //get current canvas
+// Saving current canvas as an image, currently 3 formats. The code could be shortened
+function saveImage(format){
   var canvas  = document.getElementById("my-canvas");
-  //get actual image data
-  var image   = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-
-  // send image to download through your browser. Default filename is narwhal-image.
+  switch(format){
+    case 1:
+      var download = document.getElementById("canvasPNG");
+      var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+      break;
+    case 2:
+      var download = document.getElementById("canvasJPG");
+      var image = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
+      break;
+    case 3:
+      var download = document.getElementById("canvasBMP");
+      var image = canvas.toDataURL("image/bmp").replace("image/bmp", "image/octet-stream");
+      break;
+  }
   download.setAttribute("href", image);
-
-  console.log(image);
 }
-
 //Undo/redo functionality
 function saveState(canvas, list, keepRedo){
     if(!keepRedo){
