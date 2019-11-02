@@ -20,10 +20,10 @@ var canvasHeight = 800;
 //Toggles drawing
 var drawing = false;
 //Brush x and y points into arrays
-var xPositions;
-var yPositions;
+var xPositions = [];
+var yPositions = [];
 //If the mouse is clicked down
-var downPos;
+var downPos = [];
 //Storing image states for undo/redo
 var redoList = [];
 var undoList = [];
