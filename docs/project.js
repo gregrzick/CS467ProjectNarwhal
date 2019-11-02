@@ -28,6 +28,7 @@ var downPos = [];
 var redoList = [];
 var undoList = [];
 
+
 // Stores size data used to create rubber band shapes
 // that will redraw as the user moves the mouse
 class ShapeBoundingBox{
@@ -75,6 +76,7 @@ function startUp(){
     ctx.strokeStyle = brushColor;
     ctx.lineWidth = line_Width;
     //Sets backround to white
+    ctx.lineCap = "round"
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     //Mouse functions
@@ -457,6 +459,8 @@ function changeColor(color){
     document.getElementById("color-slider-r").value = hexToDecimal(color.substr(1,2));
     document.getElementById("color-slider-g").value = hexToDecimal(color.substr(3,2));
     document.getElementById("color-slider-b").value = hexToDecimal(color.substr(5,2));
+    (document.getElementById("rgb-amount")).innerHTML = 'RGB(' + document.getElementById("color-slider-r").value + ',' + document.getElementById("color-slider-g").value 
+    + ',' + document.getElementById("color-slider-b").value + ')';
 }
 //End color change
 //RGB color
