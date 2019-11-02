@@ -83,24 +83,23 @@ function canvas(){
     canvas.addEventListener("mouseup", mouseUp);
     //Implementing ctrl+z for undo and ctrl+y for redo
     document.onkeyup = function(e){
-        if(e.ctrlKey && (e.which==90 || e.which==122))
+        if(e.ctrlKey && (e.which==90 || e.which==122)){
             undo();
-        if(e.ctrlKey && (e.which==89 || e.which==121))
+        } else if(e.ctrlKey && (e.which==89 || e.which==121)){
             redo();
+        }
     }
 }
 function changeTool(tool){
-    document.getElementById("brush").className="";
-    document.getElementById("line").className="";
-    document.getElementById("eraser").className="";
-    document.getElementById("text").className="";
+    //Removes highlight on current tool and shape dropdown icon
+    document.getElementById(currentTool).className="";
     document.getElementById("shape-dropdown").className="";
-    document.getElementById("circle").className="";
-    document.getElementById("polygon").className="";
     //Highlight current tool
     document.getElementById(tool).className="selected";
-    if(tool==="circle" || tool==="polygon")
+    //Highlight shape dropdown icon when circle or polygon is selected
+    if(tool==="circle" || tool==="polygon"){
         document.getElementById("shape-dropdown").className="selected";
+    }
     //Change current tool
     currentTool=tool;
 }
@@ -341,17 +340,21 @@ function changeLineWidth(slideAmount) {
 }
 //Changes # of polygon sides
 function changeSides(sideAmount){
-    if(sideAmount==='3'){
-        document.getElementById("currentPolygon").src="icons/triangle-icon.png";
-    }
-    if(sideAmount==='4'){
-        document.getElementById("currentPolygon").src="icons/rectangle-icon.png";
-    }
-    if(sideAmount==='5'){
-        document.getElementById("currentPolygon").src="icons/pentagon-icon.png";
-    }
-    if(sideAmount==='6'){
-        document.getElementById("currentPolygon").src="icons/hexagon-icon.png";
+    switch(sideAmount){
+        case '3':
+            document.getElementById("current-polygon").src="icons/triangle-icon.png";
+            break;
+        case '4':
+            document.getElementById("current-polygon").src="icons/rectangle-icon.png";
+            break;
+        case '5':
+            document.getElementById("current-polygon").src="icons/pentagon-icon.png";
+            break;
+        case '6':
+            document.getElementById("current-polygon").src="icons/hexagon-icon.png";
+            break;
+        default:
+            break;
     }
     polygonSides=sideAmount;
 }
