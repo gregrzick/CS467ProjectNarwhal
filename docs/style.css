@@ -63,7 +63,7 @@
     padding-bottom:11px;
 
 }
-.shape-dropdown:hover .shape-dropdown-content{
+#shape-dropdown:hover .shape-dropdown-content{
     display: inline-block;
 }
 .color-dropdown-content{

@@ -6,8 +6,8 @@ var ctx;
 var savedImage;
 //Using brush
 var dragging = false;
-//Default brush color
-var brushColor = 'black';
+//Default brush color (#000000 = black)
+var brushColor = '#000000';
 //Default line width
 var line_Width=2;
 //Default polygon shapes
@@ -81,16 +81,26 @@ function canvas(){
     canvas.addEventListener("mousedown", mouseDown);
     canvas.addEventListener("mousemove", mouseMove);
     canvas.addEventListener("mouseup", mouseUp);
+    //Implementing ctrl+z for undo and ctrl+y for redo
+    document.onkeyup = function(e){
+        if(e.ctrlKey && (e.which==90 || e.which==122))
+            undo();
+        if(e.ctrlKey && (e.which==89 || e.which==121))
+            redo();
+    }
 }
 function changeTool(tool){
     document.getElementById("brush").className="";
     document.getElementById("line").className="";
     document.getElementById("eraser").className="";
     document.getElementById("text").className="";
+    document.getElementById("shape-dropdown").className="";
     document.getElementById("circle").className="";
     document.getElementById("polygon").className="";
     //Highlight current tool
     document.getElementById(tool).className="selected";
+    if(tool==="circle" || tool==="polygon")
+        document.getElementById("shape-dropdown").className="selected";
     //Change current tool
     currentTool=tool;
 }
@@ -176,7 +186,7 @@ function mouseMove(e){
     //If using the brush or eraser and holding down the mouse, store points
     if((currentTool==='brush' || currentTool==='eraser') && drawing && dragging){
         if(currentTool==='brush'){
-            ctx.strokeStyle = document.getElementById("myColor").value;
+            ctx.strokeStyle = document.getElementById("my-color").value;
         }
         if(currentTool==='eraser'){
             ctx.strokeStyle = "white";
@@ -188,7 +198,7 @@ function mouseMove(e){
         redrawCanvas();
         drawBrush();
     }else{
-        ctx.strokeStyle = document.getElementById("myColor").value;
+        ctx.strokeStyle = document.getElementById("my-color").value;
         if(dragging){
             redrawCanvas();
             updateRubberbandOnMove(loc);
@@ -347,6 +357,12 @@ function changeSides(sideAmount){
 }
 // Saving current canvas as an image, currently 3 formats. The code could be shortened
 function saveImage(format){
+// Download canvas image as a PNG
+// Can expand later to several buttons to download as different file types
+// Need some function to have user specify a custom filename
+function canvasToPng(){
+  var download = document.getElementById("canvas-PNG");
+  //get current canvas
   var canvas  = document.getElementById("my-canvas");
   switch(format){
     case 1:
@@ -418,6 +434,15 @@ function openImage(){
     undoList = [];
 }
 //End open file via explorer
+
+//Color change buttons in dropdown
+function changeColor(color){
+    brushColor = color;
+    ctx.strokeStyle = color;
+    document.getElementById("my-color").value = color;
+    
+}
+//End color change
 
 //Attempting basic selection tool
 
