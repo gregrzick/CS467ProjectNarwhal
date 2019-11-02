@@ -451,6 +451,12 @@ function changeColor(color){
     brushColor = color;
     ctx.strokeStyle = color;
     document.getElementById("my-color").value = color;
+    //Set custom color and sliders to correct positions for preset colors  #000000
+    document.getElementById("custom-color").value = color;
+    document.getElementById("color-slider-r").value = hexToDecimal(color.substr(1,2));
+    document.getElementById("color-slider-g").value = hexToDecimal(color.substr(3,2));
+    document.getElementById("color-slider-b").value = hexToDecimal(color.substr(5,2));
+
 }
 //End color change
 //RGB color
@@ -489,6 +495,10 @@ function componentToHex(rgb) {
        hex = "0" + hex;
   }
   return hex;
+}
+//Convert Hex to Decimal
+function hexToDecimal(hex){
+    return parseInt(hex, 16);
 }
 //End RGB color
 //Attempting basic selection tool
