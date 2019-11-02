@@ -373,24 +373,17 @@ function changeSides(sideAmount){
 }
 // save the canvas as an image file type
 function saveImage(format){
-// Download canvas image as a PNG
-// Can expand later to several buttons to download as different file types
-// Need some function to have user specify a custom filename
-function canvasToPng(){
-  var download = document.getElementById("canvas-PNG");
-  //get current canvas
-  var canvas  = document.getElementById("my-canvas");
   switch(format){
     case 1:
-      var download = document.getElementById("canvasPNG");
+      var download = document.getElementById("canvas-PNG");
       var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
       break;
     case 2:
-      var download = document.getElementById("canvasJPG");
+      var download = document.getElementById("canvas-JPG");
       var image = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
       break;
     case 3:
-      var download = document.getElementById("canvasBMP");
+      var download = document.getElementById("canvas-BMP");
       var image = canvas.toDataURL("image/bmp").replace("image/bmp", "image/octet-stream");
       break;
   }
