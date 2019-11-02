@@ -453,7 +453,44 @@ function changeColor(color){
     document.getElementById("my-color").value = color;
 }
 //End color change
+//RGB color
+function changeRGB(r , g, b){
+    document.getElementById("custom-color").style.background = 
+        "#" + componentToHex(document.getElementById("color-slider-r").value) + componentToHex(document.getElementById("color-slider-g").value) + 
+        componentToHex(document.getElementById("color-slider-b").value);
+        
+    document.getElementById("custom-color").value = 
+        "#" + componentToHex(document.getElementById("color-slider-r").value) + componentToHex(document.getElementById("color-slider-g").value) + 
+        componentToHex(document.getElementById("color-slider-b").value);  
 
+    changeColor(document.getElementById("custom-color").value);
+
+    if(g===undefined && b===undefined){
+        var bAmount = document.getElementById("rgb-amount");
+        bAmount.innerHTML = 'RGB(' + document.getElementById("color-slider-r").value + ',' + document.getElementById("color-slider-g").value 
+            + ',' + document.getElementById("color-slider-b").value + ')';
+    }
+    if(r===undefined && b===undefined){
+        var gAmount = document.getElementById("rgb-amount");
+        gAmount.innerHTML = 'RGB(' + document.getElementById("color-slider-r").value + ',' + document.getElementById("color-slider-g").value 
+            + ',' + document.getElementById("color-slider-b").value + ')';;
+    }
+    if(r===undefined && g===undefined){
+        var bAmount = document.getElementById("rgb-amount");
+        bAmount.innerHTML = 'RGB(' + document.getElementById("color-slider-r").value + ',' + document.getElementById("color-slider-g").value 
+            + ',' + document.getElementById("color-slider-b").value + ')';;
+    }
+    
+}
+//Convert RGB to Hex
+function componentToHex(rgb) {
+    var hex = Number(rgb).toString(16);
+  if (hex.length < 2) {
+       hex = "0" + hex;
+  }
+  return hex;
+}
+//End RGB color
 //Attempting basic selection tool
 
 //End basic selection tool

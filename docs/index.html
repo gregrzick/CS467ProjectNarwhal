@@ -41,13 +41,12 @@
                                 <a class="color-box box6" href="#" id="color6" onclick="changeColor('#800080')"></a>
                                 <a class="color-box box7" href="#" id="color7" onclick="changeColor('#FFA500')"></a>
                                 <a class="color-box box8" href="#" id="color8" onclick="changeColor('#ADD8E6')"></a>
+                                <a class="custom-color" href="#" id="custom-color" value="#000000" onclick="changeColor(this.value)"></a>
                                 <input type="color" id="my-color">
-                                <input type="range" min="0" max="255" value="0" class="color-slider" id="" onchange="changeRGB(this.value)">
-                                <div class="" id=""></div>
-                                <input type="range" min="0" max="255" value="0" class="color-slider" id="" onchange="changeRGB(this.value)">
-                                <div class="" id=""></div>
-                                <input type="range" min="0" max="255" value="0" class="color-slider" id="" onchange="changeRGB(this.value)">
-                                <div class="" id=""></div>
+                                <div class="rgb-amount" id="rgb-amount"></div>
+                                    <input type="range" min="0" max="255" value="0" class="color-slider-r" id="color-slider-r" onchange="changeRGB(this.value,undefined ,undefined )">
+                                    <input type="range" min="0" max="255" value="0" class="color-slider-g" id="color-slider-g" onchange="changeRGB(undefined ,this.value,undefined )">
+                                    <input type="range" min="0" max="255" value="0" class="color-slider-b" id="color-slider-b" onchange="changeRGB(undefined,undefined,this.value)">
                             </div>
                         </div>
                         <div class="size-dropdown"><img class="icons" src="icons/size-icon.png">

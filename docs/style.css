@@ -68,7 +68,7 @@
 }
 .color-dropdown-content{
     display:none;
-    width: 120px;
+    width: 135px;
     position: absolute;
     background-color: gray;
 }
@@ -84,7 +84,7 @@
     float: left;
     width: 20px;
     height: 20px;
-    margin: 5px;
+    margin: 6px;
     border: 1px solid black;
 }
 .box1{
@@ -110,6 +110,19 @@
 }
 .box8{
     background-color: lightblue;
+}
+.custom-color{
+    
+    display: inline-block;
+    width: 75px;
+    height: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    margin-left: 26px;
+    background:#000000;
+}
+.color-slider{
+margin-left: 12px;
+
 }
 .slider-amount{
     padding-left: 40%;
