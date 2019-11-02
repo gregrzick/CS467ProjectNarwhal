@@ -83,30 +83,25 @@ function canvas(){
     canvas.addEventListener("mouseup", mouseUp);
     //Implementing ctrl+z for undo and ctrl+y for redo
     document.onkeyup = function(e){
-        if(e.ctrlKey && (e.which==90 || e.which==122))
-            undo();
-        if(e.ctrlKey && (e.which==89 || e.which==121))
-            redo();
-    }
-}
-function changeTool(tool){
-    document.getElementById("brush").className="";
-    document.getElementById("line").className="";
-    document.getElementById("eraser").className="";
-    document.getElementById("text").className="";
-    document.getElementById("shape-dropdown").className="";
-    document.getElementById("circle").className="";
-    document.getElementById("polygon").className="";
-    //Highlight current tool
-    document.getElementById(tool).className="selected";
-    if(tool==="circle" || tool==="polygon")
-        document.getElementById("shape-dropdown").className="selected";
         if(e.ctrlKey && (e.which==90 || e.which==122)){
             undo();
         } else if(e.ctrlKey && (e.which==89 || e.which==121)){
             redo();
         }
     }
+}
+function changeTool(tool){
+    //Removes highlight on current tool and shape dropdown icon
+    document.getElementById(currentTool).className="";
+    document.getElementById("shape-dropdown").className="";
+    //Highlight current tool
+    document.getElementById(tool).className="selected";
+    //Highlight shape dropdown icon when circle or polygon is selected
+    if(tool==="circle" || tool==="polygon"){
+        document.getElementById("shape-dropdown").className="selected";
+    }
+    //Change current tool
+    currentTool=tool;
 }
 function changeTool(tool){
     //Removes highlight on current tool and shape dropdown icon
