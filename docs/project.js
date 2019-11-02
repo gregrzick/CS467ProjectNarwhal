@@ -67,9 +67,9 @@ var mousedown = new MouseDownPos(0,0);
 var loc = new Location(0,0);
 
 // Call for our function to execute when page is loaded
-document.addEventListener('DOMContentLoaded', canvas);
+document.addEventListener('DOMContentLoaded', startUp);
 
-function canvas(){
+function startUp(){
     canvas = document.getElementById('my-canvas');
     ctx = canvas.getContext('2d');
     ctx.strokeStyle = brushColor;
@@ -156,7 +156,7 @@ function mouseDown(e){
     downPos=new Array();
 
     //Saves previous state before drawing
-    saveState(canvas, undoList, false);
+    saveState(undoList, false);
     canvas.style.cursor = "crosshair";
     loc = getMousePosition(e.clientX, e.clientY);
     saveCanvasImage();
@@ -388,28 +388,28 @@ function saveImage(format){
             break;
         default:
             break;
-  }
-  download.setAttribute("href", image);
+    }
+    download.setAttribute("href", image);
 }
 //Undo/redo functionality
-function saveState(canvas, list, keepRedo){
+function saveState(list, keepRedo){
     if(!keepRedo){
         redoList = [];
     }
     list.push(canvas.toDataURL());
 }
 function undo(){
-    restoreState(canvas, ctx, undoList);
+    restoreState(undoList);
 }
 function redo(){
-    restoreState(canvas, ctx, redoList);
+    restoreState(redoList);
 }
-function restoreState(canvas, ctx, list){
+function restoreState(list){
     if(list.length){
         if(list===undoList){
-            saveState(canvas, redoList, true);
+            saveState(redoList, true);
         }else{
-            saveState(canvas, undoList, true);
+            saveState(undoList, true);
         }
         var stateToRestore = list.pop();
         var img = document.createElement('img');
