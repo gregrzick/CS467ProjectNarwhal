@@ -99,8 +99,12 @@
                             </li>
                         </ul>
                     </div>
+                    <div id="undo-redo-btns">
+                        <button id="undo-btn" type="button" onClick="undo()">Undo</button>
+                        <button id="redo-btn" type="button" onClick="redo()">Redo</button>
+                    </div>
                 </nav>
-                <canvas id="my-canvas" width="800" height="800"></canvas>
+                <canvas id="my-canvas"></canvas>
             </div>
 
             <!--
@@ -108,10 +112,7 @@
                 <a id="canvas-PNG" download="narwhal-image.png"><button type="button" onClick="canvasToPng()">Download as PNG</button></a>
             </div>
             -->
-            <div id="undo-redo-btns">
-                <button id="undo-btn" type="button" onClick="undo()">Undo</button>
-                <button id="redo-btn" type="button" onClick="redo()">Redo</button>
-            </div>
+            
 
         </div>
 

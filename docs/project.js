@@ -15,8 +15,8 @@ var polygonSides =3;
 //Current tool. Defaut is brush
 var currentTool = 'brush';
 //Drawing boundries
-var canvasWidth = 800;
-var canvasHeight = 800;
+var canvasWidth = window.innerWidth;
+var canvasHeight = window.innerHeight;
 //Toggles drawing
 var drawing = false;
 //Brush x and y points into arrays
@@ -75,6 +75,11 @@ function startUp(){
     ctx = canvas.getContext('2d');
     ctx.strokeStyle = brushColor;
     ctx.lineWidth = line_Width;
+    var myWidth=window.innerWidth;
+    var myHeight=window.innerHeight;
+
+    ctx.canvas.width  = myWidth-56;
+    ctx.canvas.height = myHeight-67;
     //Sets backround to white
     ctx.lineCap = "round"
     ctx.fillStyle = "white";
@@ -92,6 +97,19 @@ function startUp(){
         }
     }
 }
+//WOP no button implemented yet
+function drawGrid() {
+    for (x = 0; x <= canvasWidth; x += 20) {
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvasHeight);
+        for (y = 0; y <= canvasHeight; y += 20) {
+            ctx.moveTo(0, y);
+            ctx.lineTo(canvasWidth, y);
+        }
+    }
+    ctx.stroke();
+};
+
 function changeTool(tool){
     //Removes highlight on current tool and shape dropdown icon
     document.getElementById(currentTool).className="";
@@ -233,6 +251,7 @@ function drawBrush(){
         ctx.stroke();
     }
 }
+
 //Reset mouse on mouseup
 function mouseUp(e){
     canvas.style.cursor = "default";

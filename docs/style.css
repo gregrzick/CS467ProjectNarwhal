@@ -1,5 +1,4 @@
 .wrapper {
-    max-width: 900px;
     margin: auto;
     font-family: "Arial";
 }
@@ -9,16 +8,18 @@
     background-color: grey;
     vertical-align: top;
     margin-right: -5px;
-    min-height: 758px;
+    height: 100vh;
 }
 .b1-inner{
     margin-top: 56px;
 }
 .b2{
-    width: 78%;
+    /* width: calc(100vw - 70px); */
+   
     display: inline-block;
 }
 .navbar{
+     position:absolute;
     background-color: grey;
 }
 /* Change color on hover */
@@ -30,7 +31,8 @@
     background-color: black; 
 }
 #my-canvas{
-    width: 100%;
+    height: calc(100vh - 70px );
+    width: calc(100vw - 70px);
     border: 3px solid #000000;
     display: inline-block;
 }
