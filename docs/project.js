@@ -123,6 +123,7 @@ function changeTool(tool){
     //Change current tool
     currentTool=tool;
 }
+/*Duplicate function?
 function changeTool(tool){
     //Removes highlight on current tool and shape dropdown icon
     document.getElementById(currentTool).className="";
@@ -135,7 +136,7 @@ function changeTool(tool){
     }
     //Change current tool
     currentTool=tool;
-}
+}*/
 //Draw with current tool
 function draw(loc){
     switch(currentTool){
@@ -165,6 +166,9 @@ function draw(loc){
             //Draw polygons
             getPolygon();
             ctx.stroke();
+            break;
+        case "selection":
+            
             break;
         default:
             break;
@@ -241,6 +245,7 @@ function mouseMove(e){
 function drawBrush(){
     for(var i=1;i<xPositions.length;i++){
         ctx.beginPath();
+        ctx.lineJoin = ctx.lineCap = 'round';
         if(downPos[i]){
             ctx.moveTo(xPositions[i-1], yPositions[i-1]);
         }else {
@@ -437,7 +442,7 @@ function restoreState(list){
         img.setAttribute('src',stateToRestore);
         img.onload = function(){
             ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-            ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+            ctx.drawImage(img, 0, 0);
         }
     }
 }
