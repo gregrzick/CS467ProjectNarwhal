@@ -9,7 +9,7 @@ var dragging = false;
 //Default brush color (#000000 = black)
 var brushColor = '#000000';
 //Default line width
-var line_Width=2;
+var lineWidth=2;
 //Default polygon shapes
 var polygonSides =3;
 //Current tool. Defaut is brush
@@ -74,14 +74,14 @@ function startUp(){
     canvas = document.getElementById('my-canvas');
     ctx = canvas.getContext('2d');
     ctx.strokeStyle = brushColor;
-    ctx.lineWidth = line_Width;
+    ctx.lineWidth = lineWidth;
     var myWidth=window.innerWidth;
     var myHeight=window.innerHeight;
 
     ctx.canvas.width  = myWidth-56;
     ctx.canvas.height = myHeight-67;
     //Sets backround to white
-    ctx.lineCap = "round"
+    ctx.lineJoin = ctx.lineCap = "round"
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     //Mouse functions
@@ -123,20 +123,6 @@ function changeTool(tool){
     //Change current tool
     currentTool=tool;
 }
-/*Duplicate function?
-function changeTool(tool){
-    //Removes highlight on current tool and shape dropdown icon
-    document.getElementById(currentTool).className="";
-    document.getElementById("shape-dropdown").className="";
-    //Highlight current tool
-    document.getElementById(tool).className="selected";
-    //Highlight shape dropdown icon when circle or polygon is selected
-    if(tool==="circle" || tool==="polygon"){
-        document.getElementById("shape-dropdown").className="selected";
-    }
-    //Change current tool
-    currentTool=tool;
-}*/
 //Draw with current tool
 function draw(loc){
     switch(currentTool){
@@ -168,7 +154,7 @@ function draw(loc){
             ctx.stroke();
             break;
         case "selection":
-            
+            select();
             break;
         default:
             break;
@@ -245,7 +231,6 @@ function mouseMove(e){
 function drawBrush(){
     for(var i=1;i<xPositions.length;i++){
         ctx.beginPath();
-        ctx.lineJoin = ctx.lineCap = 'round';
         if(downPos[i]){
             ctx.moveTo(xPositions[i-1], yPositions[i-1]);
         }else {
@@ -439,7 +424,7 @@ function restoreState(list){
         }
         var stateToRestore = list.pop();
         var img = document.createElement('img');
-        img.setAttribute('src',stateToRestore);
+        img.setAttribute('src', stateToRestore);
         img.onload = function(){
             ctx.clearRect(0, 0, canvasWidth, canvasHeight);
             ctx.drawImage(img, 0, 0);
@@ -530,5 +515,10 @@ function hexToDecimal(hex){
 }
 //End RGB color
 //Attempting basic selection tool
-
+function select(){
+    ctx.setLineDash([10, 10]);
+    ctx.strokeRect(shapeBoundingBox.left, shapeBoundingBox.top, 
+        shapeBoundingBox.width, shapeBoundingBox.height);
+    ctx.setLineDash([]);
+}
 //End basic selection tool
