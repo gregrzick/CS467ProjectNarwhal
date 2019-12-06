@@ -81,40 +81,17 @@
 .color-dropdown-content a{
     padding-top: 10px;
     padding-bottom: 11px;
-}
-.color-dropdown:hover .color-dropdown-content{
-    display: inline-block;
-}
-.color-box{
     float: left;
     width: 20px;
     height: 20px;
     margin: 6px;
     border: 1px solid black;
 }
-.box1{
-    background-color: black;
+.color-dropdown:hover .color-dropdown-content{
+    display: inline-block;
 }
-.box2{
-    background-color: blue;
-}
-.box3{
-    background-color: red;
-}
-.box4{
-    background-color: green;
-}
-.box5{
-    background-color: yellow;
-}
-.box6{
-    background-color: purple;
-}
-.box7{
-    background-color: orange;
-}
-.box8{
-    background-color: lightblue;
+.current-color{
+    
 }
 .custom-color{
     display: inline-block;

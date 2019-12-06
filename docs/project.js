@@ -8,6 +8,7 @@ var savedImage;
 var dragging = false;
 //Default brush color (#000000 = black)
 var brushColor = '#000000';
+var currentColor = '#000000';
 //Default line width
 var lineWidth=2;
 //Default polygon shapes
@@ -84,6 +85,8 @@ function startUp(){
     ctx.lineJoin = ctx.lineCap = "round"
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    //Setup default pallet
+    defaultPallet();
     //Mouse functions
     canvas.addEventListener("mousedown", mouseDown);
     canvas.addEventListener("mousemove", mouseMove);
@@ -456,33 +459,60 @@ function openImage(){
     undoList = [];
 }
 //End open file via explorer
-
+function defaultPallet(){
+    document.getElementById("#000000").style.background = "#000000";
+    document.getElementById("#0000FF").style.background = "#0000FF";
+    document.getElementById("#FF0000").style.background = "#FF0000";
+    document.getElementById("#008000").style.background = "#008000";
+    document.getElementById("#FFFF00").style.background = "#FFFF00";
+    document.getElementById("#800080").style.background = "#800080";
+    document.getElementById("#FFA500").style.background = "#FFA500";
+    document.getElementById("#ADD8E6").style.background = "#ADD8E6";
+ }
+function selectColor(color){
+    document.getElementById(currentColor).className="";
+    document.getElementById(color).className="current-color";
+    currentColor=color;
+}
 //Color change buttons in dropdown
 function changeColor(color){
+
     brushColor = color;
     ctx.strokeStyle = color;
     document.getElementById("my-color").value = color;
     //Set custom color and sliders to correct positions for preset colors  #000000
-    document.getElementById("custom-color").value = color;
-    document.getElementById("custom-color").style.background = color;
+    // document.getElementById("custom-color").value = color;
+    // document.getElementById("custom-color").style.background = color;
     document.getElementById("color-slider-r").value = hexToDecimal(color.substr(1,2));
     document.getElementById("color-slider-g").value = hexToDecimal(color.substr(3,2));
     document.getElementById("color-slider-b").value = hexToDecimal(color.substr(5,2));
-    (document.getElementById("rgb-amount")).innerHTML = 'RGB(' + document.getElementById("color-slider-r").value + ',' + document.getElementById("color-slider-g").value 
-    + ',' + document.getElementById("color-slider-b").value + ')';
+    (document.getElementById("rgb-amount")).innerHTML = 'RGB(' + document.getElementById("color-slider-r").value + ',' 
+        + document.getElementById("color-slider-g").value 
+        + ',' + document.getElementById("color-slider-b").value + ')';
 }
+
 //End color change
 //RGB color
-function changeRGB(r , g, b){
-    document.getElementById("custom-color").style.background = 
-        "#" + componentToHex(document.getElementById("color-slider-r").value) + componentToHex(document.getElementById("color-slider-g").value) + 
-        componentToHex(document.getElementById("color-slider-b").value);
-        
-    document.getElementById("custom-color").value = 
-        "#" + componentToHex(document.getElementById("color-slider-r").value) + componentToHex(document.getElementById("color-slider-g").value) + 
-        componentToHex(document.getElementById("color-slider-b").value);  
+function changeRGB(r, g, b){
+    document.getElementById(currentColor).style.background = 
+    "#" + componentToHex(document.getElementById("color-slider-r").value) + componentToHex(document.getElementById("color-slider-g").value) + 
+    componentToHex(document.getElementById("color-slider-b").value);
 
-    changeColor(document.getElementById("custom-color").value);
+    document.getElementById(currentColor).value =
+    "#" + componentToHex(document.getElementById("color-slider-r").value) + componentToHex(document.getElementById("color-slider-g").value) + 
+    componentToHex(document.getElementById("color-slider-b").value);
+ 
+    changeColor(document.getElementById(currentColor).value);
+
+    // document.getElementById("custom-color").style.background = 
+    //     "#" + componentToHex(document.getElementById("color-slider-r").value) + componentToHex(document.getElementById("color-slider-g").value) + 
+    //     componentToHex(document.getElementById("color-slider-b").value);
+        
+    // document.getElementById("custom-color").value = 
+    //     "#" + componentToHex(document.getElementById("color-slider-r").value) + componentToHex(document.getElementById("color-slider-g").value) + 
+    //     componentToHex(document.getElementById("color-slider-b").value);  
+
+    // changeColor(document.getElementById("custom-color").value);
 
     if(g===undefined && b===undefined){
         var bAmount = document.getElementById("rgb-amount");
