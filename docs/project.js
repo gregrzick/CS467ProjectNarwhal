@@ -578,8 +578,8 @@ function selectArea(){
     image.style.transform = "translate3d(" + (mousedown.x - 1) + "px, " + (mousedown.y - 1) + "px, 0)";
     //image.style.transform = "translate3d( 0, -100vh, 0)";
     //Clear old position
-    //ctx.clearRect(mousedown.x - 1, mousedown.y - 1, 
-    //    shapeBoundingBox.width + 3, shapeBoundingBox.height + 3);
+    ctx.clearRect(mousedown.x - 1, mousedown.y - 1, 
+        shapeBoundingBox.width + 3, shapeBoundingBox.height + 3);
     //Writes selection to top left
     //ctx.putImageData(selection, 0, 0);
 }
