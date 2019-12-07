@@ -86,10 +86,14 @@ function startUp(){
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     //Setup default pallet
     defaultPallet();
+    document.getElementById("width").value=canvasWidth;
+    document.getElementById("height").value=canvasHeight;
     //Mouse functions
     canvas.addEventListener("mousedown", mouseDown);
     canvas.addEventListener("mousemove", mouseMove);
     canvas.addEventListener("mouseup", mouseUp);
+    canvas.addEventListener("wheel", mouseScroll);
+
     //Implementing ctrl+z for undo and ctrl+y for redo
     document.onkeyup = function(e){
         if(e.ctrlKey && (e.which==90 || e.which==122)){
@@ -559,3 +563,25 @@ function selectArea(){
     image.setAttribute("src", selection);
 }
 //End basic selection tool
+// function mouseScroll(e){
+//             // cross-browser wheel delta
+//             var delta = ((e.deltaY || -e.wheelDelta || e.detail) >> 10) || 1;
+
+//             /* ... */
+//             console.log(delta);
+//         if(delta<1){
+//             canvas.style.width = Math.max(50,Math.min(window.innerWidth -70, canvas.width - 200)) + "px";
+//             canvas.style.height = Math.max(50,Math.min(window.innerHeight- 70, canvas.height - 200)) + "px"; 
+//         }else{
+//             canvas.style.width = Math.max(50,Math.min(window.innerWidth -70, canvas.width + 200)) + "px";
+//             canvas.style.height = Math.max(50,Math.min(window.innerHeight- 70, canvas.height + 200)) + "px"; 
+//         }
+// }
+function changeWidth(width){
+    canvas.style.width = Math.min(window.innerWidth-70,Math.max(100, width))+ "px";
+    document.getElementById("width").value=Math.min(window.innerWidth,Math.max(100, width));
+}
+function changeHeight(height){
+    canvas.style.height = Math.min(window.innerHeight-70,Math.max(100, height)) + "px"; 
+    document.getElementById("height").value=Math.min(window.innerHeight,Math.max(100, height));
+}

@@ -94,12 +94,16 @@
                             </li>
                         </ul>
                     </div>
+                    <div>
+                        Width: <input id="width" type="number" name="width" min="100" style="width: 4em" onchange="changeWidth(this.value)">
+                        Height: <input id="height" type="number" name="height" min="100" style="width: 4em" onchange="changeHeight(this.value)">
+                    </div>
                     <div id="undo-redo-btns">
                         <button id="undo-btn" type="button" onClick="undo()">Undo</button>
                         <button id="redo-btn" type="button" onClick="redo()">Redo</button>
                     </div>
                 </nav>
-                <canvas id="my-canvas"></canvas>
+                <canvas id="my-canvas" class="my-canvas"></canvas>
             </div>
         </div>
 
