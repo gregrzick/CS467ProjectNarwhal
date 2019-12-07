@@ -91,7 +91,7 @@ function startUp(){
     canvas.addEventListener("mousedown", mouseDown);
     canvas.addEventListener("mousemove", mouseMove);
     canvas.addEventListener("mouseup", mouseUp);
-    //canvas.addEventListener("wheel", mouseScroll);
+    canvas.addEventListener("wheel", mouseScroll);
 
     //Implementing ctrl+z for undo and ctrl+y for redo
     document.onkeyup = function(e){
