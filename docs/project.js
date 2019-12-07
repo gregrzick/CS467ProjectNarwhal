@@ -156,7 +156,7 @@ function draw(loc){
             ctx.stroke();
             break;
         case "selection":
-            select();
+            selectionBox();
             break;
         default:
             break;
@@ -448,7 +448,12 @@ function openImage(){
             img.src = e.target.result;
             img.onload = function(){
                 ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-                ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+                //Fits image to canvas iff it is larger than the canvas itself
+                if(this.width <= canvasWidth && this.height <= canvasHeight){
+                    ctx.drawImage(img, 0, 0);
+                }else{
+                    ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+                }
             }
         }
         reader.readAsDataURL(file);
@@ -533,7 +538,7 @@ function hexToDecimal(hex){
 }
 //End RGB color
 //Attempting basic selection tool
-function select(){
+function selectionBox(){
     //Formating for selection box
     ctx.setLineDash([10, 10]);
     ctx.strokeStyle = '#000000';
@@ -545,5 +550,12 @@ function select(){
     ctx.setLineDash([]);
     ctx.strokeStyle = currentColor;
     ctx.lineWidth = lineWidth;
+    //selectArea();
+}
+function selectArea(){
+    var selection = canvas.getImageData(shapeBoundingBox.left, shapeBoundingBox.top, 
+        shapeBoundingBox.width, shapeBoundingBox.height);
+    var image = document.createElement('img');
+    image.setAttribute("src", selection);
 }
 //End basic selection tool

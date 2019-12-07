@@ -90,18 +90,6 @@
 .color-dropdown:hover .color-dropdown-content{
     display: inline-block;
 }
-.current-color{
-    /*Stops warning*/
-    z-index: 0;
-}
-.custom-color{
-    display: inline-block;
-    width: 75px;
-    height: 20px;
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    margin-left: 26px;
-    background: #000000;
-}
 .color-slider{
     margin-left: 12px;
 }
