@@ -27,7 +27,8 @@ var downPos = [];
 //Storing image states for undo/redo
 var redoList = [];
 var undoList = [];
-
+//Selection tool temp image
+var tempImage;
 
 // Stores size data used to create rubber band shapes
 // that will redraw as the user moves the mouse
@@ -86,7 +87,7 @@ function startUp(){
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     document.getElementById("width").value=canvasWidth;
     document.getElementById("height").value=canvasHeight;
-
+    tempImage = document.getElementById("temp-img");
     //Mouse functions
     canvas.addEventListener("mousedown", mouseDown);
     canvas.addEventListener("mousemove", mouseMove);
@@ -176,7 +177,7 @@ function draw(loc){
             ctx.stroke();
             break;
         case "selection":
-            selectionBox();
+            selectArea();
             break;
         default:
             break;
@@ -572,21 +573,24 @@ function hexToDecimal(hex){
 //Attempting basic selection tool
 function selectionBox(){
     //Formating for selection box
-    ctx.setLineDash([10, 10]);
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 1;
+    //ctx.setLineDash([10, 10]);
+    //ctx.strokeStyle = '#000000';
+    //ctx.lineWidth = 1;
     //Draw selection box
-    ctx.strokeRect(shapeBoundingBox.left, shapeBoundingBox.top,
-        shapeBoundingBox.width, shapeBoundingBox.height);
+    //ctx.strokeRect(shapeBoundingBox.left, shapeBoundingBox.top,
+    //    shapeBoundingBox.width, shapeBoundingBox.height);
     //Reset format
-    ctx.setLineDash([]);
-    ctx.strokeStyle = currentColor;
-    ctx.lineWidth = lineWidth;
-    selectArea();
+    //ctx.setLineDash([]);
+    //ctx.strokeStyle = currentColor;
+    //ctx.lineWidth = lineWidth;
+    //selectArea();
 }
 function selectArea(){
-    var selection = ctx.getImageData(mousedown.x - 1, mousedown.y - 1, 
-        shapeBoundingBox.width + 3, shapeBoundingBox.height + 3);
+    if((shapeBoundingBox.wdith || shapeBoundingBox.height) == 0){
+        return false;
+    }
+    var selection = ctx.getImageData(mousedown.x, mousedown.y, 
+        shapeBoundingBox.width, shapeBoundingBox.height);
     //Create temp canvas to use toDataURL() from a portion of a canvas
     var tempCanvas = document.createElement('canvas');
     tempCanvas.width = shapeBoundingBox.width + 2;
@@ -596,14 +600,38 @@ function selectArea(){
     //Create image element and move to correct location
     var image = document.getElementById("temp-img");
     image.setAttribute("src", tempCanvas.toDataURL());
-    //image.style.transform = "translate3d( 0, -100vh, 0)";
-    image.style.transform = "translate3d(" + (mousedown.x + 46) + "px, " + (mousedown.y - canvas.height - 15) + "px, 0)";
+    image.style.transform = "translate3d(" + (mousedown.x + 44) + "px, " + (mousedown.y - canvas.height - 18) + "px, 0)";
+    image.style.border = "1px dashed #000000";
     //Clear old position
-    ctx.clearRect(mousedown.x - 1, mousedown.y - 1, 
-        shapeBoundingBox.width + 3, shapeBoundingBox.height + 3);
+    ctx.clearRect(mousedown.x, mousedown.y, 
+        shapeBoundingBox.width, shapeBoundingBox.height);
     //Writes selection to top left
     //ctx.putImageData(selection, 0, 0);
 }
+//Selection helper
+/*tempImage.onmousedown = function(event) {
+    let shiftX = event.clientX - tempImage.getBoundingClientRect().left;
+    let shiftY = event.clientY - tempImage.getBoundingClientRect().top;
+    tempImage.style.position = 'absolute';
+    tempImage.style.zIndex = 1000;
+    document.body.append(tempImage);
+    moveAt(event.pageX, event.pageY);
+    function moveAt(pageX, pageY) {
+        tempImage.style.left = pageX - shiftX + 'px';
+        tempImage.style.top = pageY - shiftY + 'px';
+    }
+    function onMouseMove(event) {
+        moveAt(event.pageX, event.pageY);
+    }
+    document.addEventListener('mousemove', onMouseMove);
+    tempImage.onmouseup = function() {
+        document.removeEventListener('mousemove', onMouseMove);
+        tempImage.onmouseup = null;
+    };
+};
+tempImage.ondragstart = function() {
+    return false;
+};*/
 //End basic selection tool
 function mouseScroll(e){
             // cross-browser wheel delta
