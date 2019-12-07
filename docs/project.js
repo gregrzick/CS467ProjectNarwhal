@@ -563,20 +563,21 @@ function selectArea(){
     image.setAttribute("src", selection);
 }
 //End basic selection tool
-// function mouseScroll(e){
-//             // cross-browser wheel delta
-//             var delta = ((e.deltaY || -e.wheelDelta || e.detail) >> 10) || 1;
-
-//             /* ... */
-//             console.log(delta);
-//         if(delta<1){
-//             canvas.style.width = Math.max(50,Math.min(window.innerWidth -70, canvas.width - 200)) + "px";
-//             canvas.style.height = Math.max(50,Math.min(window.innerHeight- 70, canvas.height - 200)) + "px"; 
-//         }else{
-//             canvas.style.width = Math.max(50,Math.min(window.innerWidth -70, canvas.width + 200)) + "px";
-//             canvas.style.height = Math.max(50,Math.min(window.innerHeight- 70, canvas.height + 200)) + "px"; 
-//         }
-// }
+function mouseScroll(e){
+            // cross-browser wheel delta
+            var delta = ((e.deltaY || -e.wheelDelta || e.detail) >> 10) || 1;
+        if(delta<1){
+            canvas.style.width = Math.max(100, canvasWidth-50)+ "px";
+            canvas.style.height = Math.max(100, canvasHeight-50) + "px"; 
+            canvasWidth =canvasWidth-50;
+            canvasHeight =canvasHeight-50;
+        }else{
+            canvas.style.width = Math.max(100, canvasWidth+50)+ "px";
+            canvas.style.height = Math.max(100, canvasHeight+50) + "px"; 
+            canvasWidth =canvasWidth+50;
+            canvasHeight =canvasHeight+50; 
+        }
+}
 function changeWidth(width){
     canvas.style.width = Math.min(window.innerWidth-70,Math.max(100, width))+ "px";
     document.getElementById("width").value=Math.min(window.innerWidth,Math.max(100, width));
