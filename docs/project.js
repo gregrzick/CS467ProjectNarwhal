@@ -149,6 +149,9 @@ function draw(loc){
             //Draw line
             drawBrush();
             break;
+        case "spray-can":
+            //Draw radial gradient
+            break;
         case "eraser":
             //Draw line, but white
             drawBrush();
@@ -195,9 +198,12 @@ function mouseDown(e){
     //Store that the mouse is being held down
     dragging=true;
     //Store line points
-    if(currentTool==='brush' || currentTool==='eraser'){
+    if(currentTool==='brush' || currentTool==='eraser' || currentTool==='spray-can'){
         drawing = true;
         storePos(loc.x, loc.y);
+        if(currentTool==='spray-can'){
+            ctx.moveTo(e.clientX, e.clientY);
+        }
     }
 };
 //Get canvas position
@@ -222,29 +228,43 @@ function redrawCanvas(){
     ctx.putImageData(savedImage,0,0);
 }
 function mouseMove(e){
-    canvas.style.cursor = "crosshair";
-    loc = getMousePosition(e.clientX, e.clientY);
-    //If using the brush or eraser and holding down the mouse, store points
-    if((currentTool==='brush' || currentTool==='eraser') && drawing && dragging){
-        if(currentTool==='brush'){
-            ctx.strokeStyle = document.getElementById("my-color").value;
-        }
-        if(currentTool==='eraser'){
-            ctx.strokeStyle = "white";
-        }
-        //Draw only inside canvas
-        if(loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight){
-            storePos(loc.x, loc.y, true);
-        }
-        redrawCanvas();
-        drawBrush();
-    }else{
-        ctx.strokeStyle = document.getElementById("my-color").value;
-        if(dragging){
+    if (drawing && currentTool==='spray-can'){
+        var radgrad = ctx.createRadialGradient(
+        e.clientX,e.clientY,10,e.clientX,e.clientY,20);
+        myColor = document.getElementById("my-color").value;
+        radgrad.addColorStop(0, myColor);
+        radgrad.addColorStop(0.5, myColor);
+        radgrad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = radgrad;
+        ctx.fillRect(e.clientX-20, e.clientY-20, 40, 40);
+        
+    }
+    else{
+        canvas.style.cursor = "crosshair";
+        loc = getMousePosition(e.clientX, e.clientY);
+        //If using the brush or eraser and holding down the mouse, store points
+        if((currentTool==='brush' || currentTool==='eraser') && drawing && dragging){
+            if(currentTool==='brush'){
+                ctx.strokeStyle = document.getElementById("my-color").value;
+            }
+            if(currentTool==='eraser'){
+                ctx.strokeStyle = "white";
+            }
+            //Draw only inside canvas
+            if(loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight){
+                storePos(loc.x, loc.y, true);
+            }
             redrawCanvas();
-            updateRubberbandOnMove(loc);
+            drawBrush();
+        }else{
+            ctx.strokeStyle = document.getElementById("my-color").value;
+            if(dragging){
+                redrawCanvas();
+                updateRubberbandOnMove(loc);
+            }
         }
     }
+
 };
 //Connect brush points in the array
 function drawBrush(){
@@ -266,7 +286,8 @@ function drawBrush(){
 function mouseUp(e){
     canvas.style.cursor = "default";
     loc = getMousePosition(e.clientX, e.clientY);
-    redrawCanvas();
+    if (currentTool !='spray-can')
+        redrawCanvas();
     updateRubberbandOnMove(loc);
     dragging = false;
     drawing = false;
