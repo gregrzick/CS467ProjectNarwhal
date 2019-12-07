@@ -115,7 +115,18 @@ function drawGrid() {
     }
     ctx.stroke();
 };
-
+function setTransparant(alpha){
+  //identical to clearCanvas(), but alters background opacity
+  canvas.width = canvas.width;
+  xPositions.length = 0;
+  yPositions.length = 0;
+  downPos.length = 0;
+  if (alpha > 0)
+    ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+  else
+    ctx.fillStyle = 'rgba(0, 0, 0, 0)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
 function changeTool(tool){
     //Removes highlight on current tool and shape dropdown icon
     document.getElementById(currentTool).className="";
@@ -483,26 +494,26 @@ function changeColor(color){
     document.getElementById("my-color").value = color;
     currentColor = color;
     ctx.strokeStyle = color;
-    
+
     //Set custom color and sliders to correct positions for preset colors  #000000
     document.getElementById("color-slider-r").value = hexToDecimal(color.substr(1,2));
     document.getElementById("color-slider-g").value = hexToDecimal(color.substr(3,2));
     document.getElementById("color-slider-b").value = hexToDecimal(color.substr(5,2));
-    (document.getElementById("rgb-amount")).innerHTML = 'RGB(' + document.getElementById("color-slider-r").value + ',' 
-        + document.getElementById("color-slider-g").value 
+    (document.getElementById("rgb-amount")).innerHTML = 'RGB(' + document.getElementById("color-slider-r").value + ','
+        + document.getElementById("color-slider-g").value
         + ',' + document.getElementById("color-slider-b").value + ')';
 }
 
 //End color change
 //RGB color
 function changeRGB(r, g, b){
-    document.getElementById(currentColor).setAttribute("style", "background:#" + componentToHex(document.getElementById("color-slider-r").value) + componentToHex(document.getElementById("color-slider-g").value) + 
+    document.getElementById(currentColor).setAttribute("style", "background:#" + componentToHex(document.getElementById("color-slider-r").value) + componentToHex(document.getElementById("color-slider-g").value) +
     componentToHex(document.getElementById("color-slider-b").value));
 
     document.getElementById(currentColor).value =
-    "#" + componentToHex(document.getElementById("color-slider-r").value) + componentToHex(document.getElementById("color-slider-g").value) + 
+    "#" + componentToHex(document.getElementById("color-slider-r").value) + componentToHex(document.getElementById("color-slider-g").value) +
     componentToHex(document.getElementById("color-slider-b").value);
- 
+
     var newColor = "";
     if(g===undefined && b===undefined){
         newColor = "#" + componentToHex(r) + currentColor.substr(3,4);
@@ -515,18 +526,18 @@ function changeRGB(r, g, b){
     changeColor(newColor);
     if(g===undefined && b===undefined){
         var bAmount = document.getElementById("rgb-amount");
-        bAmount.innerHTML = 'RGB(' + document.getElementById("color-slider-r").value + ',' + document.getElementById("color-slider-g").value 
+        bAmount.innerHTML = 'RGB(' + document.getElementById("color-slider-r").value + ',' + document.getElementById("color-slider-g").value
             + ',' + document.getElementById("color-slider-b").value + ')';
     }else if(r===undefined && b===undefined){
         var gAmount = document.getElementById("rgb-amount");
-        gAmount.innerHTML = 'RGB(' + document.getElementById("color-slider-r").value + ',' + document.getElementById("color-slider-g").value 
+        gAmount.innerHTML = 'RGB(' + document.getElementById("color-slider-r").value + ',' + document.getElementById("color-slider-g").value
             + ',' + document.getElementById("color-slider-b").value + ')';;
     }else if(r===undefined && g===undefined){
         var bAmount = document.getElementById("rgb-amount");
-        bAmount.innerHTML = 'RGB(' + document.getElementById("color-slider-r").value + ',' + document.getElementById("color-slider-g").value 
+        bAmount.innerHTML = 'RGB(' + document.getElementById("color-slider-r").value + ',' + document.getElementById("color-slider-g").value
             + ',' + document.getElementById("color-slider-b").value + ')';;
     }
-    
+
 }
 //Convert RGB to Hex
 function componentToHex(rgb) {
@@ -548,7 +559,7 @@ function selectionBox(){
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = 2;
     //Draw selection box
-    ctx.strokeRect(shapeBoundingBox.left, shapeBoundingBox.top, 
+    ctx.strokeRect(shapeBoundingBox.left, shapeBoundingBox.top,
         shapeBoundingBox.width, shapeBoundingBox.height);
     //Reset format
     ctx.setLineDash([]);
@@ -557,7 +568,7 @@ function selectionBox(){
     //selectArea();
 }
 function selectArea(){
-    var selection = canvas.getImageData(shapeBoundingBox.left, shapeBoundingBox.top, 
+    var selection = canvas.getImageData(shapeBoundingBox.left, shapeBoundingBox.top,
         shapeBoundingBox.width, shapeBoundingBox.height);
     var image = document.createElement('img');
     image.setAttribute("src", selection);
@@ -568,14 +579,14 @@ function mouseScroll(e){
             var delta = ((e.deltaY || -e.wheelDelta || e.detail) >> 10) || 1;
         if(delta<1){
             canvas.style.width = Math.max(100, canvasWidth-50)+ "px";
-            canvas.style.height = Math.max(100, canvasHeight-50) + "px"; 
+            canvas.style.height = Math.max(100, canvasHeight-50) + "px";
             canvasWidth =canvasWidth-50;
             canvasHeight =canvasHeight-50;
         }else{
             canvas.style.width = Math.max(100, canvasWidth+50)+ "px";
-            canvas.style.height = Math.max(100, canvasHeight+50) + "px"; 
+            canvas.style.height = Math.max(100, canvasHeight+50) + "px";
             canvasWidth =canvasWidth+50;
-            canvasHeight =canvasHeight+50; 
+            canvasHeight =canvasHeight+50;
         }
 }
 function changeWidth(width){
@@ -583,6 +594,6 @@ function changeWidth(width){
     document.getElementById("width").value=Math.min(window.innerWidth,Math.max(100, width));
 }
 function changeHeight(height){
-    canvas.style.height = Math.min(window.innerHeight-70,Math.max(100, height)) + "px"; 
+    canvas.style.height = Math.min(window.innerHeight-70,Math.max(100, height)) + "px";
     document.getElementById("height").value=Math.min(window.innerHeight,Math.max(100, height));
 }
