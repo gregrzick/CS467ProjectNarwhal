@@ -575,8 +575,8 @@ function selectArea(){
     //Create image element and move to correct location
     var image = document.getElementById("temp-img");
     image.setAttribute("src", tempCanvas.toDataURL());
-    image.style.transform = "translate3d(" + (mousedown.x - 1) + "px, " + (mousedown.y - 1) + "px, 0)";
     //image.style.transform = "translate3d( 0, -100vh, 0)";
+    image.style.transform = "translate3d(" + (mousedown.x + 46) + "px, " + (mousedown.y - canvas.height - 15) + "px, 0)";
     //Clear old position
     ctx.clearRect(mousedown.x - 1, mousedown.y - 1, 
         shapeBoundingBox.width + 3, shapeBoundingBox.height + 3);
