@@ -87,6 +87,16 @@ function startUp(){
     document.getElementById("width").value=canvasWidth;
     document.getElementById("height").value=canvasHeight;
 
+    //emoji info 
+    var emo = new Image();
+    emo.src = "icons/shapes-icon.png";
+
+    emo.onload = function(){
+        emo.addEventListener("movedown", stamp);
+        ctx.drawImage(emo, 50, 50, emo.width/2, emo.height/2);
+    }
+   
+
     //Mouse functions
     canvas.addEventListener("mousedown", mouseDown);
     canvas.addEventListener("mousemove", mouseMove);
@@ -178,6 +188,9 @@ function draw(loc){
         case "selection":
             selectionBox();
             break;
+        case "emojis":
+            ctx.emo();
+            break;
         default:
             break;
     }
@@ -198,7 +211,7 @@ function mouseDown(e){
     //Store that the mouse is being held down
     dragging=true;
     //Store line points
-    if(currentTool==='brush' || currentTool==='eraser' || currentTool==='spray-can'){
+    if(currentTool==='brush' || currentTool==='eraser' || currentTool==='spray-can' || currentTool === 'emojis'){
         drawing = true;
         storePos(loc.x, loc.y);
         if(currentTool==='spray-can'){
@@ -627,4 +640,13 @@ function changeWidth(width){
 function changeHeight(height){
     canvas.style.height = Math.min(window.innerHeight-70,Math.max(100, height)) + "px";
     document.getElementById("height").value=Math.min(window.innerHeight,Math.max(100, height));
+}
+
+//emoji details part 2
+
+
+function stamp(e){
+    e.preventDefault();
+    ctx.drawImage(emo,e.clientX, e.clientY, emo.width/2, emo.height/2)
+
 }
