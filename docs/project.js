@@ -81,18 +81,17 @@ function startUp(){
     ctx.canvas.width  = myWidth-56;
     ctx.canvas.height = myHeight-67;
     //Sets backround to white
-    ctx.lineJoin = ctx.lineCap = "round"
+    ctx.lineJoin = ctx.lineCap = "round";
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    //Setup default pallet
-    defaultPallet();
     document.getElementById("width").value=canvasWidth;
     document.getElementById("height").value=canvasHeight;
+
     //Mouse functions
     canvas.addEventListener("mousedown", mouseDown);
     canvas.addEventListener("mousemove", mouseMove);
     canvas.addEventListener("mouseup", mouseUp);
-    canvas.addEventListener("wheel", mouseScroll);
+    //canvas.addEventListener("wheel", mouseScroll);
 
     //Implementing ctrl+z for undo and ctrl+y for redo
     document.onkeyup = function(e){
@@ -121,6 +120,9 @@ function setTransparant(alpha){
   xPositions.length = 0;
   yPositions.length = 0;
   downPos.length = 0;
+  //Fix line/style width not staying the same
+  ctx.lineJoin = ctx.lineCap = "round";
+  ctx.lineWidth = lineWidth;
   if (alpha > 0)
     ctx.fillStyle = 'rgba(0, 0, 0, 1)';
   else
@@ -246,6 +248,7 @@ function mouseMove(e){
 };
 //Connect brush points in the array
 function drawBrush(){
+    ctx.lineJoin = ctx.lineCap = "round";
     for(var i=1;i<xPositions.length;i++){
         ctx.beginPath();
         if(downPos[i]){
@@ -370,6 +373,9 @@ function clearCanvas(){
     xPositions.length = 0;
     yPositions.length = 0;
     downPos.length = 0;
+    //Fix line/style width not staying the same
+    ctx.lineJoin = ctx.lineCap = "round";
+    ctx.lineWidth = lineWidth;
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
@@ -479,16 +485,6 @@ function openImage(){
     undoList = [];
 }
 //End open file via explorer
-function defaultPallet(){
-    document.getElementById("#000000").style.background = "#000000";
-    document.getElementById("#0000FF").style.background = "#0000FF";
-    document.getElementById("#FF0000").style.background = "#FF0000";
-    document.getElementById("#008000").style.background = "#008000";
-    document.getElementById("#FFFF00").style.background = "#FFFF00";
-    document.getElementById("#800080").style.background = "#800080";
-    document.getElementById("#FFA500").style.background = "#FFA500";
-    document.getElementById("#ADD8E6").style.background = "#ADD8E6";
- }
 //Color change buttons in dropdown
 function changeColor(color){
     document.getElementById("my-color").value = color;
@@ -557,7 +553,7 @@ function selectionBox(){
     //Formating for selection box
     ctx.setLineDash([10, 10]);
     ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 1;
     //Draw selection box
     ctx.strokeRect(shapeBoundingBox.left, shapeBoundingBox.top,
         shapeBoundingBox.width, shapeBoundingBox.height);
@@ -565,13 +561,27 @@ function selectionBox(){
     ctx.setLineDash([]);
     ctx.strokeStyle = currentColor;
     ctx.lineWidth = lineWidth;
-    //selectArea();
+    selectArea();
 }
 function selectArea(){
-    var selection = canvas.getImageData(shapeBoundingBox.left, shapeBoundingBox.top,
-        shapeBoundingBox.width, shapeBoundingBox.height);
-    var image = document.createElement('img');
-    image.setAttribute("src", selection);
+    var selection = ctx.getImageData(mousedown.x - 1, mousedown.y - 1, 
+        shapeBoundingBox.width + 3, shapeBoundingBox.height + 3);
+    //Create temp canvas to use toDataURL() from a portion of a canvas
+    var tempCanvas = document.createElement('canvas');
+    tempCanvas.width = shapeBoundingBox.width + 2;
+    tempCanvas.height = shapeBoundingBox.height + 2;
+    var tempCtx = tempCanvas.getContext('2d');
+    tempCtx.putImageData(selection, 0, 0);
+    //Create image element and move to correct location
+    var image = document.getElementById("temp-img");
+    image.setAttribute("src", tempCanvas.toDataURL());
+    image.style.transform = "translate3d(" + (mousedown.x - 1) + "px, " + (mousedown.y - 1) + "px, 0)";
+    //image.style.transform = "translate3d( 0, -100vh, 0)";
+    //Clear old position
+    //ctx.clearRect(mousedown.x - 1, mousedown.y - 1, 
+    //    shapeBoundingBox.width + 3, shapeBoundingBox.height + 3);
+    //Writes selection to top left
+    //ctx.putImageData(selection, 0, 0);
 }
 //End basic selection tool
 function mouseScroll(e){

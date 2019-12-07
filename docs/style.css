@@ -106,3 +106,9 @@
 .size-dropdown:hover .size-dropdown-content{
     display: inline-block;
 }
+.temp-img{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 2;
+}
