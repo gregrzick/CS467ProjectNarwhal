@@ -33,20 +33,20 @@
                         </div>
                         <div class="color-dropdown"><img class="icons" src="icons/pallet-icon.png">
                             <div class="color-dropdown-content">
-                                <a href="#" class="current-color" id="#000000" onclick="changeColor(this.id); selectColor(this.id);"></a>
-                                <a href="#" id="#0000FF" onclick="changeColor(this.id); selectColor(this.id);"></a>
-                                <a href="#" id="#FF0000" onclick="changeColor(this.id); selectColor(this.id);"></a>
-                                <a href="#" id="#008000" onclick="changeColor(this.id); selectColor(this.id);"></a>
-                                <a href="#" id="#FFFF00" onclick="changeColor(this.id); selectColor(this.id);"></a>
-                                <a href="#" id="#800080" onclick="changeColor(this.id); selectColor(this.id);"></a>
-                                <a href="#" id="#FFA500" onclick="changeColor(this.id); selectColor(this.id);"></a>
-                                <a href="#" id="#ADD8E6" onclick="changeColor(this.id); selectColor(this.id);"></a>
+                                <a href="#" id="#000000" style="background:#000000" onclick="changeColor(this.id)"></a>
+                                <a href="#" id="#0000FF" style="background:#0000FF" onclick="changeColor(this.id)"></a>
+                                <a href="#" id="#FF0000" style="background:#FF0000" onclick="changeColor(this.id)"></a>
+                                <a href="#" id="#008000" style="background:#008000" onclick="changeColor(this.id)"></a>
+                                <a href="#" id="#FFFF00" style="background:#FFFF00" onclick="changeColor(this.id)"></a>
+                                <a href="#" id="#800080" style="background:#800080" onclick="changeColor(this.id)"></a>
+                                <a href="#" id="#FFA500" style="background:#FFA500" onclick="changeColor(this.id)"></a>
+                                <a href="#" id="#ADD8E6" style="background:#ADD8E6" onclick="changeColor(this.id)"></a>
                                 <!-- <a class="custom-color" value="#000000" href="#" id="custom-color" value="#000000" onclick="changeColor(this.value)"></a> -->
 
                                 <input type="color" id="my-color">
                                 <div class="rgb-amount" id="rgb-amount"></div>
-                                    <input type="range" min="0" max="255" value="0" class="color-slider-r" id="color-slider-r" onchange="changeRGB(this.value,undefined ,undefined )">
-                                    <input type="range" min="0" max="255" value="0" class="color-slider-g" id="color-slider-g" onchange="changeRGB(undefined ,this.value,undefined )">
+                                    <input type="range" min="0" max="255" value="0" class="color-slider-r" id="color-slider-r" onchange="changeRGB(this.value,undefined,undefined)">
+                                    <input type="range" min="0" max="255" value="0" class="color-slider-g" id="color-slider-g" onchange="changeRGB(undefined,this.value,undefined)">
                                     <input type="range" min="0" max="255" value="0" class="color-slider-b" id="color-slider-b" onchange="changeRGB(undefined,undefined,this.value)">
                             </div>
                         </div>

@@ -7,12 +7,11 @@ var savedImage;
 //Using brush
 var dragging = false;
 //Default brush color (#000000 = black)
-var brushColor = '#000000';
 var currentColor = '#000000';
 //Default line width
-var lineWidth=2;
+var lineWidth = 2;
 //Default polygon shapes
-var polygonSides =3;
+var polygonSides = 3;
 //Current tool. Defaut is brush
 var currentTool = 'brush';
 //Drawing boundries
@@ -74,7 +73,7 @@ document.addEventListener('DOMContentLoaded', startUp);
 function startUp(){
     canvas = document.getElementById('my-canvas');
     ctx = canvas.getContext('2d');
-    ctx.strokeStyle = brushColor;
+    ctx.strokeStyle = currentColor;
     ctx.lineWidth = lineWidth;
     var myWidth=window.innerWidth;
     var myHeight=window.innerHeight;
@@ -361,7 +360,8 @@ function clearCanvas(){
 }
 //Changes and displays line width
 function changeLineWidth(slideAmount) {
-    ctx.lineWidth=slideAmount;
+    ctx.lineWidth = slideAmount;
+    lineWidth = slideAmount;
     var sliderDiv = document.getElementById("slider-amount");
     sliderDiv.innerHTML = slideAmount;
 }
@@ -469,20 +469,13 @@ function defaultPallet(){
     document.getElementById("#FFA500").style.background = "#FFA500";
     document.getElementById("#ADD8E6").style.background = "#ADD8E6";
  }
-function selectColor(color){
-    document.getElementById(currentColor).className="";
-    document.getElementById(color).className="current-color";
-    currentColor=color;
-}
 //Color change buttons in dropdown
 function changeColor(color){
-
-    brushColor = color;
-    ctx.strokeStyle = color;
     document.getElementById("my-color").value = color;
+    currentColor = color;
+    ctx.strokeStyle = color;
+    
     //Set custom color and sliders to correct positions for preset colors  #000000
-    // document.getElementById("custom-color").value = color;
-    // document.getElementById("custom-color").style.background = color;
     document.getElementById("color-slider-r").value = hexToDecimal(color.substr(1,2));
     document.getElementById("color-slider-g").value = hexToDecimal(color.substr(3,2));
     document.getElementById("color-slider-b").value = hexToDecimal(color.substr(5,2));
@@ -494,37 +487,32 @@ function changeColor(color){
 //End color change
 //RGB color
 function changeRGB(r, g, b){
-    document.getElementById(currentColor).style.background = 
-    "#" + componentToHex(document.getElementById("color-slider-r").value) + componentToHex(document.getElementById("color-slider-g").value) + 
-    componentToHex(document.getElementById("color-slider-b").value);
+    document.getElementById(currentColor).setAttribute("style", "background:#" + componentToHex(document.getElementById("color-slider-r").value) + componentToHex(document.getElementById("color-slider-g").value) + 
+    componentToHex(document.getElementById("color-slider-b").value));
 
     document.getElementById(currentColor).value =
     "#" + componentToHex(document.getElementById("color-slider-r").value) + componentToHex(document.getElementById("color-slider-g").value) + 
     componentToHex(document.getElementById("color-slider-b").value);
  
-    changeColor(document.getElementById(currentColor).value);
-
-    // document.getElementById("custom-color").style.background = 
-    //     "#" + componentToHex(document.getElementById("color-slider-r").value) + componentToHex(document.getElementById("color-slider-g").value) + 
-    //     componentToHex(document.getElementById("color-slider-b").value);
-        
-    // document.getElementById("custom-color").value = 
-    //     "#" + componentToHex(document.getElementById("color-slider-r").value) + componentToHex(document.getElementById("color-slider-g").value) + 
-    //     componentToHex(document.getElementById("color-slider-b").value);  
-
-    // changeColor(document.getElementById("custom-color").value);
-
+    var newColor = "";
+    if(g===undefined && b===undefined){
+        newColor = "#" + componentToHex(r) + currentColor.substr(3,4);
+    }else if(r===undefined && b===undefined){
+        newColor = "#" + currentColor.substr(1,2) + componentToHex(g) + currentColor.substr(5,2);
+    }else if(r===undefined && g===undefined){
+        newColor = "#" + currentColor.substr(1,4) + componentToHex(b);
+    }
+    document.getElementById(currentColor).setAttribute("id", newColor);
+    changeColor(newColor);
     if(g===undefined && b===undefined){
         var bAmount = document.getElementById("rgb-amount");
         bAmount.innerHTML = 'RGB(' + document.getElementById("color-slider-r").value + ',' + document.getElementById("color-slider-g").value 
             + ',' + document.getElementById("color-slider-b").value + ')';
-    }
-    if(r===undefined && b===undefined){
+    }else if(r===undefined && b===undefined){
         var gAmount = document.getElementById("rgb-amount");
         gAmount.innerHTML = 'RGB(' + document.getElementById("color-slider-r").value + ',' + document.getElementById("color-slider-g").value 
             + ',' + document.getElementById("color-slider-b").value + ')';;
-    }
-    if(r===undefined && g===undefined){
+    }else if(r===undefined && g===undefined){
         var bAmount = document.getElementById("rgb-amount");
         bAmount.innerHTML = 'RGB(' + document.getElementById("color-slider-r").value + ',' + document.getElementById("color-slider-g").value 
             + ',' + document.getElementById("color-slider-b").value + ')';;
@@ -546,9 +534,16 @@ function hexToDecimal(hex){
 //End RGB color
 //Attempting basic selection tool
 function select(){
+    //Formating for selection box
     ctx.setLineDash([10, 10]);
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 2;
+    //Draw selection box
     ctx.strokeRect(shapeBoundingBox.left, shapeBoundingBox.top, 
         shapeBoundingBox.width, shapeBoundingBox.height);
+    //Reset format
     ctx.setLineDash([]);
+    ctx.strokeStyle = currentColor;
+    ctx.lineWidth = lineWidth;
 }
 //End basic selection tool

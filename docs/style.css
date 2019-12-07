@@ -91,7 +91,8 @@
     display: inline-block;
 }
 .current-color{
-    
+    /*Stops warning*/
+    z-index: 0;
 }
 .custom-color{
     display: inline-block;
