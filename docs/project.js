@@ -83,8 +83,8 @@ function startUp(){
     ctx.canvas.height = myHeight-67;
     //Sets backround to white
     ctx.lineJoin = ctx.lineCap = "round";
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // ctx.fillStyle = "white";
+    // ctx.fillRect(0, 0, canvas.width, canvas.height);
     document.getElementById("width").value=canvasWidth;
     document.getElementById("height").value=canvasHeight;
     tempImage = document.getElementById("temp-img");
@@ -505,6 +505,35 @@ function openImage(){
     //Reset undo/redo lists (technically unnecessary)
     redoList = [];
     undoList = [];
+}
+
+function changeColorBg(color) {
+    // console.log(color)
+    var wi=document.querySelector('#my-canvas').offsetWidth;
+    var he=document.querySelector('#my-canvas').offsetHeight;
+    // var can=document.createElement('canvas');
+    // can.width=wi;
+    // can.height=he;
+    // var ctx2=can.getContext('2d');
+    // ctx2.fillStyle=color;
+    // ctx2.fillRect(0,0,wi,he);
+    // var ctx3=canvas.getContext('2d');
+    // console.log(can)
+    // ctx3.globalCompositeOperation='destination-over';
+    // ctx3.drawImage(can,0,0,wi,he);
+    // ctx3.globalCompositeOperation='source-over';
+    var c=document.querySelector('#my-canvas-bg');
+    c.width=wi;
+    c.height=he;
+    var ct=c.getContext('2d');
+    ct.fillStyle=color;
+    ct.fillRect(0,0,999999,999999);
+    // ct.drawImage(can,0,0,999999,999999);
+}
+window.onload=function () {
+    document.querySelector('#my-color-bg').addEventListener('change',function () {
+        changeColorBg(document.querySelector('#my-color-bg').value)
+    })
 }
 //End open file via explorer
 //Color change buttons in dropdown
