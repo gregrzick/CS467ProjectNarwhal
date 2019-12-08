@@ -24,7 +24,7 @@
                         <a href="#" id="selection" onclick="changeTool('selection')"><img class="icons" src="icons/text-icon.png"></a>
                         <a href="#" id="line" onclick="changeTool('line')"><img class="icons" src="icons/line-icon.png"></a>
                         <div id="shape-dropdown"><img class="icons" src="icons/shapes-icon.png">
-                            <div class="shape-dropdown-content">
+                            <div class="shape-dropdown-content" style='z-index: 3'>
                                     <a href="#" id="circle" onclick="changeTool('circle')"><img class="icons" src="icons/circle-icon.png"></a>
                                     <a href="#" class="sides" id="polygon" onclick="changeTool('polygon')"><img class="icons" id="current-polygon" src="icons/triangle-icon.png"></a>
                                     <div class="polygon-sides">
@@ -33,7 +33,7 @@
                             </div>
                         </div>
                         <div class="color-dropdown"><img class="icons" src="icons/pallet-icon.png">
-                            <div class="color-dropdown-content">
+                            <div class="color-dropdown-content" style='z-index: 3'>
                                 <a href="#" id="#000000" style="background:#000000" onclick="changeColor(this.id)"></a>
                                 <a href="#" id="#0000FF" style="background:#0000FF" onclick="changeColor(this.id)"></a>
                                 <a href="#" id="#FF0000" style="background:#FF0000" onclick="changeColor(this.id)"></a>
@@ -50,6 +50,21 @@
                                     <input type="range" min="0" max="255" value="0" class="color-slider-b" id="color-slider-b" onchange="changeRGB(undefined,undefined,this.value)">
                             </div>
                         </div>
+                        <div class="color-dropdown"><img class="icons" src="icons/bg.png" style='width: 42px;height: 42px;margin-left: 4px;'>
+                            <div class="color-dropdown-content" style='z-index: 3'>
+                                <a href="#" id="#000000-bg" style="background:#000000" onclick="changeColorBg('#000000')"></a>
+                                <a href="#" id="#0000FF-bg" style="background:#0000FF" onclick="changeColorBg('#0000FF')"></a>
+                                <a href="#" id="#FF0000-bg" style="background:#FF0000" onclick="changeColorBg('#FF0000')"></a>
+                                <a href="#" id="#008000-bg" style="background:#008000" onclick="changeColorBg('#008000')"></a>
+                                <a href="#" id="#FFFF00-bg" style="background:#FFFF00" onclick="changeColorBg('#FFFF00')"></a>
+                                <a href="#" id="#800080-bg" style="background:#800080" onclick="changeColorBg('#800080')"></a>
+                                <a href="#" id="#FFA500-bg" style="background:#FFA500" onclick="changeColorBg('#FFA500')"></a>
+                                <a href="#" id="#ADD8E6-bg" style="background:#ADD8E6" onclick="changeColorBg('#ADD8E6')"></a>
+
+                                <input type="color" id="my-color-bg">
+                                <br><br>
+                            </div>
+                        </div>
                         <div class="size-dropdown"><img class="icons" src="icons/size-icon.png">
                             <div class="size-dropdown-content">
                                 <input type="range" min="1" max="20" value="2" class="slider" id="my-range" onchange="changeLineWidth(this.value)">
@@ -60,7 +75,7 @@
                     </nav>
                 </div>
             </div>
-            <div class="b2">
+            <div class="b2" style='position: relative'>
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <a class="navbar-brand" href="#"><img class="logo" src="icons/narwhal-icon.png">Project Narwhal<img class="logo" src="icons/narwhal-icon.png"></a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-supported-content" aria-controls="navbar-supported-content" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,7 +121,8 @@
                         <button id="redo-btn" type="button" onClick="redo()">Redo</button>
                     </div>
                 </nav>
-                <canvas id="my-canvas" class="my-canvas"></canvas>
+                <canvas id="my-canvas-bg" class="my-canvas-bg" style='position: absolute;top:56px;left: 0;bottom: 0;right: 0;z-index: 1;'></canvas>
+                <canvas id="my-canvas" class="my-canvas" style='position: relative;z-index: 1'></canvas>
             </div>
         </div>
             <img id="temp-img" src="">
