@@ -92,7 +92,6 @@ function startUp(){
     emo.src = "icons/shapes-icon.png";
 
     emo.onload = function(){
-        emo.addEventListener("movedown", stamp);
         ctx.drawImage(emo, 50, 50, emo.width/2, emo.height/2);
     }
    
@@ -101,7 +100,8 @@ function startUp(){
     canvas.addEventListener("mousedown", mouseDown);
     canvas.addEventListener("mousemove", mouseMove);
     canvas.addEventListener("mouseup", mouseUp);
-    canvas.addEventListener("wheel", mouseScroll);
+    canvas.addEventListener("wheel", mouseScroll);   
+    //canvas.addEventListener("touchdown", stamp);//emoji listener
 
     //Implementing ctrl+z for undo and ctrl+y for redo
     document.onkeyup = function(e){
@@ -189,7 +189,6 @@ function draw(loc){
             selectionBox();
             break;
         case "emojis":
-            ctx.emo();
             break;
         default:
             break;
@@ -642,9 +641,7 @@ function changeHeight(height){
     document.getElementById("height").value=Math.min(window.innerHeight,Math.max(100, height));
 }
 
-//emoji details part 2
-
-
+//emo stamp function
 function stamp(e){
     e.preventDefault();
     ctx.drawImage(emo,e.clientX, e.clientY, emo.width/2, emo.height/2)
