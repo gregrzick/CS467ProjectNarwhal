@@ -89,20 +89,21 @@ function startUp(){
 
     //emoji info 
     var emo = new Image();
-    emo.src = "icons/shapes-icon.png";
-
+    emo.src = "icons/emojis.png";
+    //emo.addEventListener('load', e => {
+    //ctx.drawImage(emo, e.clientX, e.clientY, emo.width/2, emo.height/2);
     emo.onload = function(){
-        ctx.drawImage(emo, 50, 50, emo.width/2, emo.height/2);
-    }
+    ctx.drawImage(emo, clientX, clientY, emo.width/2, emo.height/2);
+    } //look into the order of functions
    
-
+  
     //Mouse functions
     canvas.addEventListener("mousedown", mouseDown);
     canvas.addEventListener("mousemove", mouseMove);
     canvas.addEventListener("mouseup", mouseUp);
     canvas.addEventListener("wheel", mouseScroll);   
-    //canvas.addEventListener("touchdown", stamp);//emoji listener
-
+    //emo.addEventListener("click", stamp);//emoji listener
+    
     //Implementing ctrl+z for undo and ctrl+y for redo
     document.onkeyup = function(e){
         if(e.ctrlKey && (e.which==90 || e.which==122)){
@@ -190,6 +191,18 @@ function draw(loc){
             break;
         case "emojis":
             break;
+        case "grayscale":
+            grayscale();
+            break;
+        case "blur":
+            blur();
+            break;
+        case "invert":
+            invert();
+            break;
+        case "brightness":
+            brightness();
+            break;
         default:
             break;
     }
@@ -210,7 +223,7 @@ function mouseDown(e){
     //Store that the mouse is being held down
     dragging=true;
     //Store line points
-    if(currentTool==='brush' || currentTool==='eraser' || currentTool==='spray-can' || currentTool === 'emojis'){
+    if(currentTool==='brush' || currentTool==='eraser' || currentTool==='spray-can' || currentTool === 'emojis'|| currentTool === 'filterwand' || currentTool === 'grayscale' || currentTool === 'blur' || currentTool === 'invert' || currentTool === 'brightness'){
         drawing = true;
         storePos(loc.x, loc.y);
         if(currentTool==='spray-can'){
@@ -646,4 +659,28 @@ function stamp(e){
     e.preventDefault();
     ctx.drawImage(emo,e.clientX, e.clientY, emo.width/2, emo.height/2)
 
+}
+
+function grayscale(){
+    //retrieves and reads image data
+    ctx.getImageData(0,0, canvas.width, canvas.height);
+    //runs filter on read image data
+    ctx.filter = 'grayscale(100%)';
+    //draws back filter to image data boundaries
+    ctx.drawImage(img, canvas.width, canvas.height);
+}
+function blur(){
+    ctx.getImageData(0,0, canvas.width, canvas.height);
+    ctx.filter = 'blur(5px)';
+    ctx.drawImage(img, canvas.width, canvas.height);
+}
+function invert(){
+    ctx.getImageData(0,0, canvas.width, canvas.height);
+    ctx.filter = 'invert(100%)';
+    ctx.drawImage(img, canvasWidth, canvasHeight);
+}
+function brightness(){
+    ctx.getImageData(0,0, canvas.width, canvas.height);
+    ctx.filter = 'brightness(200%)';
+    ctx.drawImage(img, canvas.width, canvas.height);
 }
