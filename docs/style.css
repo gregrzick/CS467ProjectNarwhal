@@ -16,6 +16,7 @@
 .b2{
     width: calc(100vw - 70px); 
     display: inline-block;
+    position: relative;
 }
 .navbar{
     position: absolute;
@@ -35,10 +36,15 @@
     border: 3px solid #000000;
     display: inline-block;
     z-index: 1;
+    position: relative;
 }
-#extra-canvas{
-    display: inline-block;
-    z-index: 2;
+.my-canvas-bg{
+    position: absolute;
+    top:56px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
 }
 #img-data-div{
     width: 100%;
@@ -63,6 +69,7 @@
     position: absolute;
     background-color: gray;
     margin-left: -1px;
+    z-index: 3;
 }
 .shape-dropdown-content a{
     padding-top: 10px;
@@ -77,6 +84,7 @@
     position: absolute;
     background-color: gray;
     margin-left: -1px;
+    z-index: 3;
 }
 .color-dropdown-content a{
     padding-top: 10px;
@@ -102,6 +110,7 @@
     position: absolute;
     background-color: gray;
     margin-left: -1px;
+    z-index: 2;
 }
 .size-dropdown:hover .size-dropdown-content{
     display: inline-block;
@@ -110,5 +119,12 @@
     position: absolute;
     top: 0px;
     left: 0px;
-    z-index: 2;
+    border: 1px dashed #000000;
+    z-index: 100;
+}
+#width{
+    width: 4em;
+}
+#height{
+    width: 4em;
 }

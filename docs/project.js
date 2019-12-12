@@ -600,20 +600,6 @@ function hexToDecimal(hex){
 }
 //End RGB color
 //Attempting basic selection tool
-function selectionBox(){
-    //Formating for selection box
-    //ctx.setLineDash([10, 10]);
-    //ctx.strokeStyle = '#000000';
-    //ctx.lineWidth = 1;
-    //Draw selection box
-    //ctx.strokeRect(shapeBoundingBox.left, shapeBoundingBox.top,
-    //    shapeBoundingBox.width, shapeBoundingBox.height);
-    //Reset format
-    //ctx.setLineDash([]);
-    //ctx.strokeStyle = currentColor;
-    //ctx.lineWidth = lineWidth;
-    //selectArea();
-}
 function selectArea(){
     if((shapeBoundingBox.wdith || shapeBoundingBox.height) == 0){
         return false;
